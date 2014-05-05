@@ -1,0 +1,59 @@
+/*****************************************************
+*	Designed and programmed by Mohamed Adam Chaieb.
+*****************************************************/
+
+body {
+	font-family: 'Source Sans Pro';
+	width: 100%;
+	margin: 0 0 50px 0;
+	background-color: #a1cee0;
+	display: block;
+}
+
+header, h1 , h2, p {
+	width: 70%;
+	margin:0 auto 0 auto;
+	padding: 5px 15% 5px 15%;
+	display: block;
+}
+
+header {
+	background-color: #ffc40d;
+	font-size: 3em;
+	font-weight: bold;
+	border-bottom: 10px solid #222;
+}
+
+h1 {
+	background-color: #222;
+	color : white;
+}
+
+footer {
+	color: #222;
+	background-color: #a1cee0;
+	display: block;
+	position: fixed;
+	bottom: 0;
+	left: 15%;
+	height: 40px;
+	width: 70%;
+	border-top: 1px solid #222;
+	padding-left: 5px;
+	line-height: 40px;
+}
+
+footer a {
+	color: #222;
+}
+
+sub {
+	font-size: 20px;
+}
+
+#game {
+	margin: 0 auto 0 auto;
+	display: block;
+	width: 800px;
+	height: 550px;
+}
