@@ -2,6 +2,8 @@
 *	Designed and programmed by Mohamed Adam Chaieb.
 *****************************************************/
 
+//test
+
 function GraphicsManager() {
 	// Some convenient renames and constants
 	var Point = Isomer.Point;
