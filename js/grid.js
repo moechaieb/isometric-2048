@@ -104,25 +104,25 @@ function Grid() {
 		switch(dir) {
 			case 0 : //case up
 				for (var i = pos+gridSize; i < gridSize*gridSize; i+=gridSize) {
-					if(this.tiles[i] && this.tiles[i].level == this.tiles[pos].level)
+					if(this.tiles[i] && this.tiles[i].level === this.tiles[pos].level)
 						return i;
 				};
 				break;
 			case 1 : //case right
 				for (var i = pos+1; i < Math.ceil((pos+0.1)/gridSize)*gridSize; i++) {
-					if(this.tiles[i] && this.tiles[i].level == this.tiles[pos].level)
+					if(this.tiles[i] && this.tiles[i].level === this.tiles[pos].level)
 						return i;
 				};
 				break;
 			case 2 : //case down
 				for (var i = pos-gridSize; i >= 0; i-=gridSize) {
-					if(this.tiles[i] && this.tiles[i].level == this.tiles[pos].level)
+					if(this.tiles[i] && this.tiles[i].level === this.tiles[pos].level)
 						return i;
 				};
 				break;
 			case 3 : //case left
 				for (var i = pos-1; i >= Math.floor(pos/gridSize)*gridSize; i--) {
-					if(this.tiles[i] && this.tiles[i].level == this.tiles[pos].level)
+					if(this.tiles[i] && this.tiles[i].level === this.tiles[pos].level)
 						return i;
 				};
 				break;

@@ -9,9 +9,10 @@ function GraphicsManager() {
 	var Shape = Isomer.Shape;
 	var Color = Isomer.Color;
 	//some constants
-	var squareSide = 3;
+	var squareSide = 2.2;
 	var gridSize = 4;
 	var thickness = 0.15;
+	var refreshRate = 5;
 	var boardcolors = [new Color(32,32,32), new Color(0,0,0)]; (71,63,189)
 	var progression = [new Color(255,255,255), new Color(221,178,152), new Color(205,115,104), new Color(255,84,63),
 				   	   new Color(111,225,118), new Color(71,63,189), new Color(95,241,124), new Color(0,249,138),
@@ -69,7 +70,6 @@ function GraphicsManager() {
 		var dxs = [];
 		var dys = [];
 		var tile3Ds = [];
-		var refreshes = 3;
 		var newXs = [];
 		var newYs = [];
 		var gridCells = [];
@@ -94,17 +94,14 @@ function GraphicsManager() {
 			self.drawBoard();
 			for (var i = 0; i < gridCells.length; i++) {
 				self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[gridCells[i].lvl]);
-				dxs[i] += (newXs[i]-(gridCells[i].index%gridSize))/refreshes;
-				dys[i] += (newYs[i]-(Math.floor(gridCells[i].index/gridSize)))/refreshes;
+				dxs[i] += (newXs[i]-(gridCells[i].index%gridSize))/refreshRate;
+				dys[i] += (newYs[i]-(Math.floor(gridCells[i].index/gridSize)))/refreshRate;
 			};
 			if(grid.newTile) {
 				self.iso.add(newTile.translate(0,0,3-3*dn), progression[grid.newTile.level]);
-				dn += 1/(refreshes*3);
+				dn += 1/(refreshRate*squareSide);
 			}
-			if(c == refreshes*3){
-				// for (var i = 0; i < gridCells.length; i++) {
-				// 	self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[gridCells[i].lvl]);
-				// };
+			if(c === refreshRate*squareSide){
 				clearInterval(id);
 			};
 			c++;
