@@ -3,8 +3,17 @@
 *****************************************************/
 
 //constructor for tiles
-function Tile(posX, posY, lvl) {
-	this.x = posX;
-	this.y = posY;
-	this.level = lvl;
+function Tile(position, level) {
+	this.x = position.x;
+	this.y = position.y;
+	this.level = level;
+	this.mergedFrom = null;
+	this.previousPosition = null;
+};
+
+//add state-updating functionality
+Tile.prototype.updatePosition = function(position) {
+	this.previousPosition = {x: this.x, y: this.y};
+	this.x = position.x;
+	this.y = position.y;
 };

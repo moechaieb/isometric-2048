@@ -54,6 +54,6 @@ sub {
 #game {
 	margin: 0 auto 0 auto;
 	display: block;
-	width: 800px;
-	height: 550px;
+	width: 550px;
+	height: 400px;
 }
