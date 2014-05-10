@@ -58,12 +58,13 @@ GraphicsManager.prototype.makeTile3D = function(tile) {
 };
 
 GraphicsManager.prototype.drawTiles = function(grid) {
+	var self = this;
 	this.iso.canvas.clear();
 	this.drawBoard();
-	for (var i = grid.tiles.length-1 ; i >= 0 ; i--) {
-		if(grid.tiles[i])
-			this.iso.add(this.makeTile3D(grid.tiles[i]),progression[grid.tiles[i].level]);
-	};
+	grid.eachCell(function(x,y,tile) {
+		if(tile)
+			self.iso.add(self.makeTile3D(tile),progression[tile.level]);
+	});
 };
 
 // dynamically moves tiles in the movement map to their new positions
@@ -80,12 +81,12 @@ GraphicsManager.prototype.updateScene = function(grid) {
 		var newTile = this.makeTile3D(grid.newTile);
 		var dn = 0;
 	}
-	for (var i = 0; i < grid.tiles.length; i++) {
+	for (var i = 0; i < grid.moveMap.length; i++) {
 		if(grid.moveMap[i]) {
-			gridCells.push({index: grid.moveMap[i].oldPos, lvl : grid.moveMap[i].level});
-			newXs.push(grid.moveMap[i].newPos%gridSize);
-			newYs.push(Math.floor(grid.moveMap[i].newPos/gridSize));
-			tile3Ds[i] = this.makeTile3D({x: gridCells[i].index%gridSize, y: Math.floor(gridCells[i].index/gridSize)});
+			gridCells.push({position: grid.moveMap[i].oldPos, lvl : grid.moveMap[i].level});
+			newXs.push(grid.moveMap[i].newPos.x);
+			newYs.push(Math.floor(grid.moveMap[i].newPos.y));
+			tile3Ds[i] = this.makeTile3D({x: gridCells[i].position.x, y: gridCells[i].position.y});
 			dxs[i] = 0;
 			dys[i] = 0;
 		};	

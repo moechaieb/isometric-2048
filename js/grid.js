@@ -3,7 +3,7 @@
 ******************************************************/
 
 /*
-	
+	Constructs an empty 4 by 4 grid
 */
 function Grid() {
 	this.gridSize = 4;
@@ -17,66 +17,92 @@ function Grid() {
 };
 
 /*
-	Iterator for the tiles in the grid
+	Iterator for the tiles in the grid, applies the given function
+	to all tiles in the grid
 */
 Grid.prototype.eachCell = function(fun) {
-	for (var i = 0; i < this.gridSize; i++) {
-		for (var j = 0; j < this.gridSize; j++) {
+	for (var i = this.gridSize-1; i >= 0; i--) {
+		for (var j = this.gridSize-1; j >= 0; j--) {
 			fun(i, j, this.tiles[i][j]);
 		};
 	};
 };
 
 /*
-	
-*/
-Grid.prototype.cellOccupied = function(pos) {
-	return this.tiles[pos] == null;
-};
-
-/*
-	
+	Inserts the tile in the grid in the correct cell
 */
 Grid.prototype.insertTile = function(tile) {
 	this.tiles[tile.x][tile.y] = tile;
 };
 
 /*
-	
+	Removes the tile from the grid
 */
 Grid.prototype.removeTile = function(tile) {
 	this.tiles[tile.x][tile.y] = null;
 };
 
 /*
-
+	Returns an array of all the free positions in the grid
 */
 Grid.prototype.freePositions = function() {
 	var free = [];
-
+	var self = this;
+	this.eachCell(function(x,y,tile) {
+		if(!tile)
+			free.push({x: x, y: y});
+	});
+	return free;
 };
 
 /*
-	Returns a random empty position
+	Returns a random empty position.
 */
 Grid.prototype.getRandomPosition = function() {
-	return {x: 0, y: 0};
+	var freeTiles = this.freePositions();
+	if(freeTiles.length)
+		return freeTiles[Math.floor(Math.random()*freeTiles.length)];
 };
 
 /*
-	
+	Initializes the grid with two tiles.
 */
 Grid.prototype.init = function() {
 	//add two tiles at random positions
-	this.insertTile(new Tile(this.getRandomPosition(), Math.floor(Math.random()*2)));
-	this.insertTile(new Tile(this.getRandomPosition(), Math.floor(Math.random()*2)));
+	this.generateTile();
+	console.log(this.freePositions());
+	this.generateTile();
+	console.log(this.freePositions())
+	this.newTile = null;
 };
 
 /*
-	
+	Returns a tuple {newPos, mergeTarget} of the new position of the tile at the given
+	position, and the tile with which it merged, if any.
 */
 Grid.prototype.getMovePosition = function(pos, dir) {
-	
+	switch(dir) {
+		case 0: //up
+			for(var i = pos.y; i<gridSize; i++) {
+
+			};
+			break;
+		case 1: //right
+			for(var i = pos.x; i<gridSize; i++) {
+
+			};
+			break;
+		case 2: //down
+			for(var i = pos.y;i >= 0; i--) {
+
+			};
+			break;
+		case 3: //left
+			for(var i = pos.y;i >=0 ; i--) {
+
+			};
+			break;
+	}
 };
 
 /*
@@ -88,30 +114,42 @@ Grid.prototype.generateTile = function() {
 };
 
 /*
-	Returns null if the cell doesn't merge, or returns a tuple {mergeWith, mergePos} of 
-	he cell with which it merges and the position that it will land in
-*/
-Grid.prototype.getMergeTarget = function(pos, dir) {
-	
-};
-
-/*
 	Returns a new grid with an updated state
 */
 Grid.prototype.update = function(dir) {
 	var newPos;
-	var mergeTarget;
+	var self = this;
 	this.moveMap = [];
 	this.newTile = null;
+	this.eachCell(function(x,y,tile) {
+		newPos = self.getMovePosition({x:x, y:y}, dir);
+	});
+	if(this.differentState)
+		this.generateTile();
+	console.log(this.tiles);
 }
 
 /*
-*	Helper method, returns true if two tile arrays are equal, false otherwise
+	Returns true if the previous state is different from the current one.
 */
-var arrayEquals = function(a1, a2) {
-	for(var i = 0; i<a1.length;i++) {
-		if((a1[i] == null && a2[i] != null) || ((a2[i] == null && a1[i] != null)))
-			return false;
+Grid.prototype.differentState = function() {
+		
+};
+
+/*
+	Returns a tuple {gameOver, gameState} of a boolean indicating if the game is over
+	and a string indicating the state of the game (win or loss).
+*/
+Grid.prototype.gameOver = function() {
+	var free = this.freePositions();
+	var self = this;
+	if(!free.length)
+		return {gameOver: true, gameState: "loss"};
+	else {
+		this.eachCell(function(x,y,tile) {
+			if(tile.level == 10)
+				return {gameOver: true, gameState: "win"};
+		});
 	};
-	return true;
-}
+	return {gameOver: false, gameState: "live"};
+};
