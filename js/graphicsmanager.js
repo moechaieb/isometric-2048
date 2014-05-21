@@ -1,44 +1,40 @@
 /*****************************************************
+*
 *	Designed and programmed by Mohamed Adam Chaieb.
+*	Built with Isomer: http://jdan.github.io/isomer/
+*
 *****************************************************/
 
-// Some convenient renames and constants
+/*
+	Convenient renames.
+*/
 var Point = Isomer.Point;
 var Path = Isomer.Path;
 var Shape = Isomer.Shape;
 var Color = Isomer.Color;
 
-//some constants
+/*
+	Important constants.
+*/
 var squareSide = 2.2;
 var gridSize = 4;
 var thickness = 0.15;
-var refreshRate = 5;
+var refreshRate = 4;
 var boardcolors = [new Color(32,32,32), new Color(0,0,0)]; (71,63,189)
 var progression = [new Color(255,255,255), new Color(221,178,152), new Color(205,115,104), new Color(255,84,63),
 			   	   new Color(111,225,118), new Color(71,63,189), new Color(95,241,124), new Color(0,249,138),
 			       new Color(0,249,255), new Color(208,21,139), new Color(95,241,9)];
 
+/*
+	Constucts a GraphicsManager object, wrapping an Isomer object
+*/
 function GraphicsManager() {
 	this.iso = new Isomer(document.getElementById("game"));
-
-	this.drawNewTile = function(grid) {
-		// var refreshes = 10;
-		// var shape = this.makeTile3D(grid.newTile).translate(0,0,2);
-		// var d = 0; 
-		// var self = this;
-		// var c = 0;
-		// var id = setInterval(function() {
-		// 	self.iso.canvas.clear();
-		// 	self.drawTiles(grid);
-		// 	self.iso.add(shape.translate(0,0,d), progression[grid.newTile.level]);
-		// 	d -= 2/refreshes;
-		// 	if(c == refreshes)
-		// 		clearInterval(id);
-		// 	c++;
-		// }, 1);
-	};
 };
 
+/*
+	Draws the board on which the tiles will move.
+*/
 GraphicsManager.prototype.drawBoard = function() {
 	//add board
 	this.iso.add(Shape.Prism(Point(0-thickness,0-thickness,0), 4*squareSide, 4*squareSide, thickness));
@@ -53,10 +49,16 @@ GraphicsManager.prototype.drawBoard = function() {
 	};
 };
 
+/*
+	Contructs a 3D tile representation of a tile object.
+*/
 GraphicsManager.prototype.makeTile3D = function(tile) {
 	return Shape.Prism(Point(tile.x*squareSide,tile.y*squareSide), squareSide, squareSide, thickness);
 };
 
+/*
+	Draws all tiles in the grid on the board.
+*/
 GraphicsManager.prototype.drawTiles = function(grid) {
 	var self = this;
 	this.iso.canvas.clear();
@@ -67,7 +69,9 @@ GraphicsManager.prototype.drawTiles = function(grid) {
 	});
 };
 
-// dynamically moves tiles in the movement map to their new positions
+/*
+	Dynamically updates the scene to the new state of the grid.
+*/
 GraphicsManager.prototype.updateScene = function(grid) {
 	var self = this;
 	var dxs = [];
@@ -96,17 +100,16 @@ GraphicsManager.prototype.updateScene = function(grid) {
 		self.drawBoard();
 		for (var i = 0; i < gridCells.length; i++) {
 			self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[gridCells[i].lvl]);
-			dxs[i] += (newXs[i]-(gridCells[i].index%gridSize))/refreshRate;
-			dys[i] += (newYs[i]-(Math.floor(gridCells[i].index/gridSize)))/refreshRate;
+			dxs[i] += (newXs[i]-(gridCells[i].position.x))/refreshRate;
+			dys[i] += (newYs[i]-(gridCells[i].position.y))/refreshRate;
 		};
 		if(grid.newTile) {
-			self.iso.add(newTile.translate(0,0,3-3*dn), progression[grid.newTile.level]);
-			dn += 1/(refreshRate*squareSide);
+			// self.iso.add(newTile.translate(0,0,3-3*dn), progression[grid.newTile.level]);
+			// dn += 1/(refreshRate*squareSide);
 		}
 		if(c === refreshRate*squareSide){
 			clearInterval(id);
 		};
 		c++;
-	}, 2);
-	//add the new tile, if there is one
+	}, 1);
 };

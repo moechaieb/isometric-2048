@@ -1,5 +1,7 @@
 /*****************************************************
+*
 *	Designed and programmed by Mohamed Adam Chaieb.
+*
 *****************************************************/
 
 function KeyManager(g, grid) {
@@ -8,7 +10,9 @@ function KeyManager(g, grid) {
 	this.bind();
 }
 
-//initialize key listeners
+/*
+	Binds keys to key listeners.
+*/
 KeyManager.prototype.bind = function () {
 	var self = this;
 	Mousetrap.bind(['up', 'w'], function() {self.trigger(0);});
@@ -17,6 +21,9 @@ KeyManager.prototype.bind = function () {
 	Mousetrap.bind(['right', 'd'], function() {self.trigger(1);});	
 };
 
+/*
+	This function is triggered when a key is pressed.
+*/
 KeyManager.prototype.trigger = function(n) {
 	this.gameGrid.update(n);
 	this.graphicsManager.updateScene(this.gameGrid);

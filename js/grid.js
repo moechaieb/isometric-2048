@@ -1,18 +1,17 @@
 /*****************************************************
+*
 *	Designed and programmed by Mohamed Adam Chaieb.
+*
 ******************************************************/
 
 /*
-	Constructs an empty 4 by 4 grid
+	Constructs an empty 4 by 4 grid.
 */
 function Grid() {
 	this.gridSize = 4;
 	this.moveMap = [];
-	this.tiles = [[null, null, null, null],
-				  [null, null, null, null],
-				  [null, null, null, null],
-				  [null, null, null, null]];
-	this.previousState = [];
+	this.tiles = [[],[],[],[]];
+	this.previousState = [[],[],[],[]];
 	this.newTile = null;
 };
 
@@ -36,11 +35,21 @@ Grid.prototype.insertTile = function(tile) {
 };
 
 /*
-	Removes the tile from the grid
+	Removes the tile from the grid, does nothing when passed null
 */
 Grid.prototype.removeTile = function(tile) {
-	this.tiles[tile.x][tile.y] = null;
+	if(tile)
+		this.tiles[tile.x][tile.y] = null;
 };
+
+/*
+	Updates the position of the specified tile, without removing it from the grid.
+*/
+Grid.prototype.updateTile = function(tile, newPos) {
+	this.removeTile(tile);
+	tile.updatePosition(newPos);
+	this.insertTile(tile);
+}
 
 /*
 	Returns an array of all the free positions in the grid
@@ -70,9 +79,7 @@ Grid.prototype.getRandomPosition = function() {
 Grid.prototype.init = function() {
 	//add two tiles at random positions
 	this.generateTile();
-	console.log(this.freePositions());
 	this.generateTile();
-	console.log(this.freePositions())
 	this.newTile = null;
 };
 
@@ -81,10 +88,18 @@ Grid.prototype.init = function() {
 	position, and the tile with which it merged, if any.
 */
 Grid.prototype.getMovePosition = function(pos, dir) {
+	var merge = null;
+	var newPos = {x:pos.x, y:pos.y};
 	switch(dir) {
 		case 0: //up
-			for(var i = pos.y; i<gridSize; i++) {
-
+			for(var i = gridSize-1; i>=pos+1; i--) {
+				if(pos.y == gridSize-1)
+					newPos = pos;
+				if(!this.tiles[pos.x][i]) {
+					newPos = {x:pos.x, y:i}
+				}
+				else if(this.tiles[pos.x][i].level == this.tiles[pos.x][pos.y].level)
+					merge = this.tiles[pos.x][i];
 			};
 			break;
 		case 1: //right
@@ -103,6 +118,8 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 			};
 			break;
 	}
+	//console.log("Tile at position ("+pos.x+","+pos.y+") is merging with tile at position ("+merge.x+","+merge.y+") and going to ("+newPos.x+","+newPos.y+")");
+	return {newPos: newPos, mergeTarget: merge};
 };
 
 /*
@@ -117,15 +134,27 @@ Grid.prototype.generateTile = function() {
 	Returns a new grid with an updated state
 */
 Grid.prototype.update = function(dir) {
-	var newPos;
+	var update;
 	var self = this;
 	this.moveMap = [];
 	this.newTile = null;
+	this.previousState = this.tiles;
 	this.eachCell(function(x,y,tile) {
-		newPos = self.getMovePosition({x:x, y:y}, dir);
+		if(tile) {
+			update = self.getMovePosition({x:x, y:y}, dir);
+			if(update.mergeTarget) {
+				self.insertTile(new Tile(update.newPos, tile.level+1));
+				self.moveMap.push({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level+1});
+			} else {
+				self.moveMap.push({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level});
+			}
+			self.removeTile(mergeTarget);
+			self.removeTile(tile);
+		};
 	});
 	if(this.differentState)
 		this.generateTile();
+	console.log(this.moveMap);
 	console.log(this.tiles);
 }
 
