@@ -16,11 +16,12 @@ var Color = Isomer.Color;
 /*
 	Important constants.
 */
-var squareSide = 2.2;
+var squareSide = 2;
 var gridSize = 4;
 var thickness = 0.15;
 var refreshRate = 4;
-var boardcolors = [new Color(32,32,32), new Color(0,0,0)]; (71,63,189)
+var space = 0.2;
+var boardcolors = [new Color(32,32,32), new Color(0,0,0)];
 var progression = [new Color(255,255,255), new Color(221,178,152), new Color(205,115,104), new Color(255,84,63),
 			   	   new Color(111,225,118), new Color(71,63,189), new Color(95,241,124), new Color(0,249,138),
 			       new Color(0,249,255), new Color(208,21,139), new Color(95,241,9)];
@@ -37,14 +38,14 @@ function GraphicsManager() {
 */
 GraphicsManager.prototype.drawBoard = function() {
 	//add board
-	this.iso.add(Shape.Prism(Point(0-thickness,0-thickness,0), 4*squareSide, 4*squareSide, thickness));
+	this.iso.add(Shape.Prism(Point(0-thickness,0-thickness,0), 4*squareSide+5*space, 4*squareSide+5*space, thickness), boardcolors[1]);
 	//initialize the squares
 	for (var i = 3; i >= 0; i--) {
 		for (var j = 3; j >= 0; j--) {
-			this.iso.add(new Path([Point(i*squareSide, j*squareSide, 0), 
-				Point(i*squareSide+squareSide, j*squareSide, 0),
-				Point(i*squareSide+squareSide, j*squareSide+squareSide, 0),
-				Point(i*squareSide, j*squareSide+squareSide, 0)]), boardcolors[(i+j)%2]);
+			this.iso.add(new Path([Point(i*(squareSide+space)+space, j*(squareSide+space)+space, 0), 
+				Point(i*(squareSide+space)+space+squareSide, j*(space+squareSide)+space, 0),
+				Point(i*(squareSide+space)+space+squareSide, j*(space+squareSide)+space+squareSide, 0),
+				Point(i*(squareSide+space)+space, j*(space+squareSide)+squareSide+space, 0)]), boardcolors[0]);
 		};
 	};
 };
@@ -53,7 +54,7 @@ GraphicsManager.prototype.drawBoard = function() {
 	Contructs a 3D tile representation of a tile object.
 */
 GraphicsManager.prototype.makeTile3D = function(tile) {
-	return Shape.Prism(Point(tile.x*squareSide,tile.y*squareSide), squareSide, squareSide, thickness);
+	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, thickness);
 };
 
 /*
