@@ -12,6 +12,7 @@ function Grid() {
 	this.moveMap = [];
 	this.tiles = [[null,null,null,null],[null,null,null,null],[null,null,null,null],[null,null,null,null]];
 	this.newTile = null;
+	this.score = 0;
 };
 
 /*
@@ -191,19 +192,20 @@ Grid.prototype.update = function(dir) {
 		if(tile) {
 			update = self.getMovePosition({x:x, y:y}, dir);
 			if(update.merge) {
+				self.score += Math.pow(2, tile.level+1);
 				self.removeTile(tile);
 				self.insertTile(new Tile(update.newPos, tile.level+1));
-				self.moveMap.push({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level+1});
+				self.addToMoveMap({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level+1});
 			} else {
 				self.updateTile(tile, update.newPos)
-				self.moveMap.push({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level});
+				self.addToMoveMap({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level});
 			};
 		};
 	});
 	if(this.differentState())
 		this.generateTile();
 	else this.newTile = null;
-}
+};
 
 /*
 	Returns true if the previous state is different from the current one.
@@ -235,5 +237,5 @@ Grid.prototype.gameOver = function() {
 	this.addToMoveMap	
 */
 Grid.prototype.addToMoveMap = function(move) {
-
+	this.moveMap[move.newPos.x+move.newPos.y*gridSize] = move;
 };

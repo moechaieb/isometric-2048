@@ -31,6 +31,8 @@ header, h1 , h2, p {
 
 header {
 	width: 100%;
+	height: 100px;
+	line-height: 100px;
 	text-align: center;
 	background-color: #ffc40d;
 	font-size: 4em;
@@ -64,6 +66,16 @@ footer a {
 
 sub {
 	font-size: 0.4em;
+}
+
+.score {
+	position: absolute;
+	font-size: 1.5em;
+	font-weight: bold;
+	top: 725px;
+	left: 50%;
+	width: 200px;
+	margin-left: 100px;
 }
 
 #game {

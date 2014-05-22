@@ -4,8 +4,8 @@
 *
 *****************************************************/
 
-function KeyManager(g, grid) {
-	this.graphicsManager = g;
+function KeyManager(gpx, grid) {
+	this.graphicsManager = gpx;
 	this.gameGrid = grid;
 	this.bind();
 }
@@ -27,4 +27,13 @@ KeyManager.prototype.bind = function () {
 KeyManager.prototype.trigger = function(n) {
 	this.gameGrid.update(n);
 	this.graphicsManager.updateScene(this.gameGrid);
+	this.updateScore();
+};
+
+/*
+	Updates the score on the screen
+*/
+KeyManager.prototype.updateScore = function() {
+	var score = document.getElementsByClassName('score')[0];
+	score.innerHTML = "Score: "+this.gameGrid.score;
 };

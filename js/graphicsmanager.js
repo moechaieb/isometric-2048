@@ -20,13 +20,13 @@ var Color = Isomer.Color;
 var squareSide = 1.4;
 var gridSize = 4;
 var thickness = 0.075;
-var refreshRate = 2.5;
+var refreshRate = 3.5;
 var elevation = 2;
 var space = 0.6;
 var center; //to be used later when implementing rotating the board
 var viewAngle = 0; //to be used later when implementing rotating the board
 var boardcolors = [new Color(64,64,64), new Color(0,0,0)];
-var progression = [new Color(230,230,230), new Color(220,180,160), new Color(210,120,110), new Color(255,50,50),
+var progression = [new Color(230,230,230), new Color(220,180,160), new Color(210,120,110), new Color(255,70,70),
 			   	   new Color(255,0,0), new Color(255,255,150), new Color(255,230,110), new Color(255,210,50),
 			       new Color(255,195,15), new Color(230,150,60), new Color(230,110,25)];
 
@@ -92,12 +92,9 @@ GraphicsManager.prototype.updateScene = function(grid) {
 			var newTile = this.makeTile3D(grid.newTile);
 			var dn = 0;
 		};
-		for (var i = 0; i < grid.moveMap.length; i++) {
+		for (var i = grid.moveMap.length-1; i >= 0; i--) {
 			if(grid.moveMap[i]) {
-				gridCells.push({position: grid.moveMap[i].oldPos, level : grid.moveMap[i].level});
-				newXs.push(grid.moveMap[i].newPos.x);
-				newYs.push(Math.floor(grid.moveMap[i].newPos.y));
-				tile3Ds[i] = this.makeTile3D({x: gridCells[i].position.x, y: gridCells[i].position.y, level: gridCells[i].level});
+				tile3Ds[i] = this.makeTile3D({x: grid.moveMap[i].oldPos.x, y: grid.moveMap[i].oldPos.y, level: grid.moveMap[i].level});
 				dxs[i] = 0;
 				dys[i] = 0;
 			};	
@@ -106,18 +103,19 @@ GraphicsManager.prototype.updateScene = function(grid) {
 		var id = setInterval(function() {
 			self.iso.canvas.clear();
 			self.drawBoard();
-			for (var i = 0; i < gridCells.length; i++) {
-				self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[gridCells[i].level]);
-				dxs[i] += (newXs[i]-(gridCells[i].position.x))/refreshRate;
-				dys[i] += (newYs[i]-(gridCells[i].position.y))/refreshRate;
+			for (var i = grid.moveMap.length-1; i >= 0; i--) {
+				if(grid.moveMap[i]) {
+					self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[grid.moveMap[i].level]);
+					dxs[i] += (grid.moveMap[i].newPos.x-(grid.moveMap[i].oldPos.x))/refreshRate;
+					dys[i] += (grid.moveMap[i].newPos.y-(grid.moveMap[i].oldPos.y))/refreshRate;
+				};
 			};
 			if(grid.newTile) {
 				self.iso.add(newTile.translate(0,0,elevation*(1-dn)), progression[grid.newTile.level]);
 				dn += 1/(refreshRate*(squareSide+space));
 			};
-			if(c === refreshRate*(squareSide+space)-1){
+			if(c === refreshRate*(squareSide+space)){
 				clearInterval(id);
-				self.drawTiles(grid);
 			};
 			c++;
 		}, 1);
