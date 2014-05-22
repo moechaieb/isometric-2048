@@ -18,9 +18,14 @@ body {
 	margin: 0 auto 50px auto; 
 }
 
+p, footer {
+	font-size: 1.1em;
+}
+
 header, h1 , h2, p {
 	width: 100%;
-	padding: 5px 0 5px 0;
+	padding-bottom: 5px;
+	margin: 0;
 	display: block;
 }
 

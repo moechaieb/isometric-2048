@@ -15,13 +15,16 @@ var Color = Isomer.Color;
 
 /*
 	Important constants.
+	For animations to work, the following must hold: refreshRate*(squareSide+space) must be an integer
 */
 var squareSide = 2;
 var gridSize = 4;
-var thickness = 0.15;
+var thickness = 0.1;
 var refreshRate = 4;
-var space = 0.2;
-var boardcolors = [new Color(32,32,32), new Color(0,0,0)];
+var elevation = 2;
+var space = 0.25;
+var viewAngle = 0; //to be used later when implementing rotating the board
+var boardcolors = [new Color(64,64,64), new Color(0,0,0)];
 var progression = [new Color(255,255,255), new Color(221,178,152), new Color(205,115,104), new Color(255,84,63),
 			   	   new Color(111,225,118), new Color(71,63,189), new Color(95,241,124), new Color(0,249,138),
 			       new Color(0,249,255), new Color(208,21,139), new Color(95,241,9)];
@@ -38,7 +41,7 @@ function GraphicsManager() {
 */
 GraphicsManager.prototype.drawBoard = function() {
 	//add board
-	this.iso.add(Shape.Prism(Point(0-thickness,0-thickness,0), 4*squareSide+5*space, 4*squareSide+5*space, thickness), boardcolors[1]);
+	this.iso.add(Shape.Prism(Point(-thickness,-thickness,0), 4*squareSide+5*space, 4*squareSide+5*space, thickness), boardcolors[1]);
 	//initialize the squares
 	for (var i = 3; i >= 0; i--) {
 		for (var j = 3; j >= 0; j--) {
@@ -64,7 +67,7 @@ GraphicsManager.prototype.drawTiles = function(grid) {
 	var self = this;
 	this.iso.canvas.clear();
 	this.drawBoard();
-	grid.eachCell(function(x,y,tile) {
+	grid.eachCell(null, function(x,y,tile) {
 		if(tile)
 			self.iso.add(self.makeTile3D(tile),progression[tile.level]);
 	});
@@ -105,10 +108,10 @@ GraphicsManager.prototype.updateScene = function(grid) {
 			dys[i] += (newYs[i]-(gridCells[i].position.y))/refreshRate;
 		};
 		if(grid.newTile) {
-			// self.iso.add(newTile.translate(0,0,3-3*dn), progression[grid.newTile.level]);
-			// dn += 1/(refreshRate*squareSide);
+			self.iso.add(newTile.translate(0,0,elevation*(1-dn)), progression[grid.newTile.level]);
+			dn += 1/(refreshRate*(squareSide+space));
 		}
-		if(c === refreshRate*squareSide){
+		if(c === refreshRate*(squareSide+space)){
 			clearInterval(id);
 		};
 		c++;

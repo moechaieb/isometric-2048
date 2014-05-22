@@ -22,3 +22,10 @@ Tile.prototype.updatePosition = function(position) {
 	this.x = position.x;
 	this.y = position.y;
 };
+
+/*
+	Returns true if the tile is a new tile tile (hasn't been moved around)
+*/
+Tile.prototype.isNew = function() {
+	return (this.previousPosition == null);
+}

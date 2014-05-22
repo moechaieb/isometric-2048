@@ -10,19 +10,29 @@
 function Grid() {
 	this.gridSize = 4;
 	this.moveMap = [];
-	this.tiles = [[],[],[],[]];
+	this.tiles = [[null,null,null,null],[null,null,null,null],[null,null,null,null],[null,null,null,null]];
 	this.previousState = [[],[],[],[]];
 	this.newTile = null;
 };
 
 /*
 	Iterator for the tiles in the grid, applies the given function
-	to all tiles in the grid
+	to all tiles in the grid. The order of iteration is decided by
+	the direction parameter
 */
-Grid.prototype.eachCell = function(fun) {
-	for (var i = this.gridSize-1; i >= 0; i--) {
-		for (var j = this.gridSize-1; j >= 0; j--) {
-			fun(i, j, this.tiles[i][j]);
+Grid.prototype.eachCell = function(dir, fun) {
+	if(!dir || dir < 2) {
+		for (var i = this.gridSize-1; i >= 0; i--) {
+			for (var j = this.gridSize-1; j >= 0; j--) {
+				fun(i, j, this.tiles[i][j]);
+			};
+		};
+	} else {
+		console.log("BOOM")
+		for (var i = 0; i < gridSize; i++) {
+			for (var j = 0; j < gridSize; j++) {
+				fun(i, j, this.tiles[i][j]);
+			};
 		};
 	};
 };
@@ -57,7 +67,7 @@ Grid.prototype.updateTile = function(tile, newPos) {
 Grid.prototype.freePositions = function() {
 	var free = [];
 	var self = this;
-	this.eachCell(function(x,y,tile) {
+	this.eachCell(null, function(x,y,tile) {
 		if(!tile)
 			free.push({x: x, y: y});
 	});
@@ -77,7 +87,6 @@ Grid.prototype.getRandomPosition = function() {
 	Initializes the grid with two tiles.
 */
 Grid.prototype.init = function() {
-	//add two tiles at random positions
 	this.generateTile();
 	this.generateTile();
 	this.newTile = null;
@@ -90,35 +99,82 @@ Grid.prototype.init = function() {
 Grid.prototype.getMovePosition = function(pos, dir) {
 	var merge = null;
 	var newPos = {x:pos.x, y:pos.y};
+	var inc = 1;
 	switch(dir) {
 		case 0: //up
-			for(var i = gridSize-1; i>=pos+1; i--) {
-				if(pos.y == gridSize-1)
-					newPos = pos;
-				if(!this.tiles[pos.x][i]) {
-					newPos = {x:pos.x, y:i}
-				}
-				else if(this.tiles[pos.x][i].level == this.tiles[pos.x][pos.y].level)
-					merge = this.tiles[pos.x][i];
+			// Find the upmost valid position, then depending on the tile that's right after,
+			// determine if you need to merge or not
+			while(pos.y+inc < gridSize) {
+				if(this.tiles[pos.x][pos.y+inc] == null)
+					inc++;
+				else break;
+			};
+			if(this.tiles[pos.x][pos.y+inc] == null) {
+				newPos = {x:pos.x, y:pos.y+inc-1}
+				break;
+			} else if(this.tiles[pos.x][pos.y+inc]) {
+				if(this.tiles[pos.x][pos.y+inc].level == this.tiles[pos.x][pos.y].level) {
+					newPos = {x: pos.x, y: pos.y+inc};
+					merge = this.tiles[pos.x][pos.y+inc];
+				} else newPos = {x: pos.x, y: pos.y+inc-1};
+				break;
 			};
 			break;
 		case 1: //right
-			for(var i = pos.x; i<gridSize; i++) {
-
+			while(pos.x+inc < gridSize) {
+				if(this.tiles[pos.x+inc][pos.y] == null)
+					inc++;
+				else break;
+			};
+			console.log(this.tiles)
+			if(this.tiles[pos.x+inc] == null) {
+				newPos = {x:pos.x+inc-1, y:pos.y}
+				break;
+			} else if(this.tiles[pos.x+inc][pos.y]) {
+				if(this.tiles[pos.x+inc][pos.y].level == this.tiles[pos.x][pos.y].level) {
+					newPos = {x: pos.x+inc, y: pos.y};
+					merge = this.tiles[pos.x+inc][pos.y];
+				} else newPos = {x: pos.x+inc-1, y: pos.y};
+				break;
 			};
 			break;
 		case 2: //down
-			for(var i = pos.y;i >= 0; i--) {
-
+			while(pos.y-inc >= 0) {
+				if(this.tiles[pos.x][pos.y-inc] == null)
+					inc++;
+				else break;
+			};
+			if(this.tiles[pos.x][pos.y-inc] == null) {
+				newPos = {x:pos.x, y:pos.y-inc+1}
+				break;
+			} else if(this.tiles[pos.x][pos.y-inc]) {
+				if(this.tiles[pos.x][pos.y-inc].level == this.tiles[pos.x][pos.y].level) {
+					newPos = {x: pos.x, y: pos.y-inc};
+					merge = this.tiles[pos.x][pos.y-inc];
+				} else newPos = {x: pos.x, y: pos.y-inc+1};
+				break;
 			};
 			break;
 		case 3: //left
-			for(var i = pos.y;i >=0 ; i--) {
-
+			while(pos.x-inc >= 0) {
+				if(this.tiles[pos.x-inc][pos.y] == null)
+					inc++;
+				else break;
+			};
+			console.log(inc)
+			console.log(this.tiles)
+			if(this.tiles[pos.x-inc] == null) {
+				newPos = {x:pos.x-inc+1, y:pos.y}
+				break;
+			} else if(this.tiles[pos.x-inc][pos.y]) {
+				if(this.tiles[pos.x-inc][pos.y].level == this.tiles[pos.x][pos.y].level) {
+					newPos = {x: pos.x-inc, y: pos.y};
+					merge = this.tiles[pos.x-inc][pos.y];
+				} else newPos = {x: pos.x-inc+1, y: pos.y};
+				break;
 			};
 			break;
 	}
-	//console.log("Tile at position ("+pos.x+","+pos.y+") is merging with tile at position ("+merge.x+","+merge.y+") and going to ("+newPos.x+","+newPos.y+")");
 	return {newPos: newPos, mergeTarget: merge};
 };
 
@@ -139,23 +195,27 @@ Grid.prototype.update = function(dir) {
 	this.moveMap = [];
 	this.newTile = null;
 	this.previousState = this.tiles;
-	this.eachCell(function(x,y,tile) {
+	this.eachCell(dir, function(x,y,tile) {
 		if(tile) {
 			update = self.getMovePosition({x:x, y:y}, dir);
 			if(update.mergeTarget) {
+				self.removeTile(tile);
 				self.insertTile(new Tile(update.newPos, tile.level+1));
 				self.moveMap.push({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level+1});
 			} else {
+				self.updateTile(tile, update.newPos)
 				self.moveMap.push({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level});
 			}
-			self.removeTile(mergeTarget);
-			self.removeTile(tile);
 		};
 	});
 	if(this.differentState)
 		this.generateTile();
-	console.log(this.moveMap);
-	console.log(this.tiles);
+	var test;
+	for (var i = 0; i < this.moveMap.length; i++) {
+		test = this.moveMap[i]
+		if(test)
+			console.log("Tile at ("+test.oldPos.x+","+test.oldPos.y+") moving to ("+test.newPos.x+","+test.newPos.y+")");
+	};
 }
 
 /*
@@ -175,7 +235,7 @@ Grid.prototype.gameOver = function() {
 	if(!free.length)
 		return {gameOver: true, gameState: "loss"};
 	else {
-		this.eachCell(function(x,y,tile) {
+		this.eachCell(0, function(x,y,tile) {
 			if(tile.level == 10)
 				return {gameOver: true, gameState: "win"};
 		});
