@@ -46,8 +46,7 @@ Grid.prototype.insertTile = function(tile) {
 	Removes the tile from the grid, does nothing when passed null
 */
 Grid.prototype.removeTile = function(tile) {
-	if(tile)
-		this.tiles[tile.x][tile.y] = null;
+	this.tiles[tile.x][tile.y] = null;
 };
 
 /*
@@ -91,11 +90,11 @@ Grid.prototype.init = function() {
 };
 
 /*
-	Returns a tuple {newPos, mergeTarget} of the new position of the tile at the given
-	position, and the tile with which it merged, if any.
+	Returns a tuple {newPos, merge} of the new position of the tile at the given
+	position, and a boolean indicating if the tile merged.
 */
 Grid.prototype.getMovePosition = function(pos, dir) {
-	var merge = null;
+	var merge = false;
 	var newPos = {x:pos.x, y:pos.y};
 	var inc = 1;
 	switch(dir) {
@@ -113,7 +112,7 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 			} else if(this.tiles[pos.x][pos.y+inc]) {
 				if(this.tiles[pos.x][pos.y+inc].level == this.tiles[pos.x][pos.y].level) {
 					newPos = {x: pos.x, y: pos.y+inc};
-					merge = this.tiles[pos.x][pos.y+inc];
+					merge = true;
 				} else newPos = {x: pos.x, y: pos.y+inc-1};
 				break;
 			};
@@ -130,7 +129,7 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 			} else if(this.tiles[pos.x+inc][pos.y]) {
 				if(this.tiles[pos.x+inc][pos.y].level == this.tiles[pos.x][pos.y].level) {
 					newPos = {x: pos.x+inc, y: pos.y};
-					merge = this.tiles[pos.x+inc][pos.y];
+					merge = true;
 				} else newPos = {x: pos.x+inc-1, y: pos.y};
 				break;
 			};
@@ -147,7 +146,7 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 			} else if(this.tiles[pos.x][pos.y-inc]) {
 				if(this.tiles[pos.x][pos.y-inc].level == this.tiles[pos.x][pos.y].level) {
 					newPos = {x: pos.x, y: pos.y-inc};
-					merge = this.tiles[pos.x][pos.y-inc];
+					merge = true;
 				} else newPos = {x: pos.x, y: pos.y-inc+1};
 				break;
 			};
@@ -164,13 +163,13 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 			} else if(this.tiles[pos.x-inc][pos.y]) {
 				if(this.tiles[pos.x-inc][pos.y].level == this.tiles[pos.x][pos.y].level) {
 					newPos = {x: pos.x-inc, y: pos.y};
-					merge = this.tiles[pos.x-inc][pos.y];
+					merge = true;
 				} else newPos = {x: pos.x-inc+1, y: pos.y};
 				break;
 			};
 			break;
 	}
-	return {newPos: newPos, mergeTarget: merge};
+	return {newPos: newPos, merge: merge};
 };
 
 /*
@@ -191,21 +190,19 @@ Grid.prototype.update = function(dir) {
 	this.eachCell(dir, function(x,y,tile) {
 		if(tile) {
 			update = self.getMovePosition({x:x, y:y}, dir);
-			if(update.mergeTarget) {
+			if(update.merge) {
 				self.removeTile(tile);
 				self.insertTile(new Tile(update.newPos, tile.level+1));
 				self.moveMap.push({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level+1});
 			} else {
 				self.updateTile(tile, update.newPos)
 				self.moveMap.push({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level});
-			}
+			};
 		};
 	});
 	if(this.differentState())
 		this.generateTile();
 	else this.newTile = null;
-	var state = this.gameOver();
-	console.log("State of the game: is it over? "+state.gameOver+" status: "+state.gameState)
 }
 
 /*
@@ -224,21 +221,8 @@ Grid.prototype.differentState = function() {
 };
 
 /*
-	Returns a tuple {gameOver, gameState} of a boolean indicating if the game is over
-	and a string indicating the state of the game (win or loss).
+	TODO: implement this
 */
 Grid.prototype.gameOver = function() {
-	var free = this.freePositions();
-	var self = this;
-	if(!free.length)
-		return {gameOver: true, gameState: "loss"};
-	else {
-		this.eachCell(null, function(x,y,tile) {
-			if(tile) {
-				if(tile.level == 10)
-					return {gameOver: true, gameState: "win"};
-			}
-		});
-	};
-	return {gameOver: false, gameState: "live"};
+	
 };

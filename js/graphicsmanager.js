@@ -17,12 +17,12 @@ var Color = Isomer.Color;
 	Important constants.
 	For animations to work, the following must hold: refreshRate*(squareSide+space) must be an integer
 */
-var squareSide = 1.6;
+var squareSide = 1.4;
 var gridSize = 4;
 var thickness = 0.075;
-var refreshRate = 4;
-var elevation = 2;
-var space = 0.4;
+var refreshRate = 3;
+var elevation = 1.5;
+var space = 0.6;
 var center; //to be used later when implementing rotating the board
 var viewAngle = 0; //to be used later when implementing rotating the board
 var boardcolors = [new Color(64,64,64), new Color(0,0,0)];
@@ -58,7 +58,7 @@ GraphicsManager.prototype.drawBoard = function() {
 	Contructs a 3D tile representation of a tile object.
 */
 GraphicsManager.prototype.makeTile3D = function(tile) {
-	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, thickness);
+	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, Math.pow(1.9, tile.level)*thickness);
 };
 
 /*
@@ -92,10 +92,10 @@ GraphicsManager.prototype.updateScene = function(grid) {
 	}
 	for (var i = 0; i < grid.moveMap.length; i++) {
 		if(grid.moveMap[i]) {
-			gridCells.push({position: grid.moveMap[i].oldPos, lvl : grid.moveMap[i].level});
+			gridCells.push({position: grid.moveMap[i].oldPos, level : grid.moveMap[i].level});
 			newXs.push(grid.moveMap[i].newPos.x);
 			newYs.push(Math.floor(grid.moveMap[i].newPos.y));
-			tile3Ds[i] = this.makeTile3D({x: gridCells[i].position.x, y: gridCells[i].position.y});
+			tile3Ds[i] = this.makeTile3D({x: gridCells[i].position.x, y: gridCells[i].position.y, level: gridCells[i].level});
 			dxs[i] = 0;
 			dys[i] = 0;
 		};	
@@ -105,7 +105,7 @@ GraphicsManager.prototype.updateScene = function(grid) {
 		self.iso.canvas.clear();
 		self.drawBoard();
 		for (var i = 0; i < gridCells.length; i++) {
-			self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[gridCells[i].lvl]);
+			self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[gridCells[i].level]);
 			dxs[i] += (newXs[i]-(gridCells[i].position.x))/refreshRate;
 			dys[i] += (newYs[i]-(gridCells[i].position.y))/refreshRate;
 		};
@@ -113,10 +113,17 @@ GraphicsManager.prototype.updateScene = function(grid) {
 			self.iso.add(newTile.translate(0,0,elevation*(1-dn)), progression[grid.newTile.level]);
 			dn += 1/(refreshRate*(squareSide+space));
 		}
-		if(c === refreshRate*(squareSide+space)){
+		if(c === refreshRate*(squareSide+space)-1){
 			clearInterval(id);
+			self.drawTiles(grid);
 		};
 		c++;
 	}, 1);
 	//Animation phase 2: grow all tiles to their respective levels
+	// id = setInterval(function() {
+	// 	console.log("Phase 2")
+	// 	self.iso.canvas.clear();
+	// 	self.drawBoard();
+	// 	clearInterval(id);
+	// }, 1);
 };
