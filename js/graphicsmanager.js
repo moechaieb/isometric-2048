@@ -17,12 +17,13 @@ var Color = Isomer.Color;
 	Important constants.
 	For animations to work, the following must hold: refreshRate*(squareSide+space) must be an integer
 */
-var squareSide = 2;
+var squareSide = 1.6;
 var gridSize = 4;
-var thickness = 0.1;
+var thickness = 0.075;
 var refreshRate = 4;
 var elevation = 2;
-var space = 0.25;
+var space = 0.4;
+var center; //to be used later when implementing rotating the board
 var viewAngle = 0; //to be used later when implementing rotating the board
 var boardcolors = [new Color(64,64,64), new Color(0,0,0)];
 var progression = [new Color(230,230,230), new Color(220,180,160), new Color(210,120,110), new Color(255,50,50),

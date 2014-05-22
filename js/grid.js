@@ -11,7 +11,6 @@ function Grid() {
 	this.gridSize = 4;
 	this.moveMap = [];
 	this.tiles = [[null,null,null,null],[null,null,null,null],[null,null,null,null],[null,null,null,null]];
-	this.previousState = [[],[],[],[]];
 	this.newTile = null;
 };
 
@@ -28,7 +27,6 @@ Grid.prototype.eachCell = function(dir, fun) {
 			};
 		};
 	} else {
-		console.log("BOOM")
 		for (var i = 0; i < gridSize; i++) {
 			for (var j = 0; j < gridSize; j++) {
 				fun(i, j, this.tiles[i][j]);
@@ -126,7 +124,6 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 					inc++;
 				else break;
 			};
-			console.log(this.tiles)
 			if(this.tiles[pos.x+inc] == null) {
 				newPos = {x:pos.x+inc-1, y:pos.y}
 				break;
@@ -161,8 +158,6 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 					inc++;
 				else break;
 			};
-			console.log(inc)
-			console.log(this.tiles)
 			if(this.tiles[pos.x-inc] == null) {
 				newPos = {x:pos.x-inc+1, y:pos.y}
 				break;
@@ -193,8 +188,6 @@ Grid.prototype.update = function(dir) {
 	var update;
 	var self = this;
 	this.moveMap = [];
-	this.newTile = null;
-	this.previousState = this.tiles;
 	this.eachCell(dir, function(x,y,tile) {
 		if(tile) {
 			update = self.getMovePosition({x:x, y:y}, dir);
@@ -208,21 +201,26 @@ Grid.prototype.update = function(dir) {
 			}
 		};
 	});
-	if(this.differentState)
+	if(this.differentState())
 		this.generateTile();
-	var test;
-	for (var i = 0; i < this.moveMap.length; i++) {
-		test = this.moveMap[i]
-		if(test)
-			console.log("Tile at ("+test.oldPos.x+","+test.oldPos.y+") moving to ("+test.newPos.x+","+test.newPos.y+")");
-	};
+	else this.newTile = null;
+	var state = this.gameOver();
+	console.log("State of the game: is it over? "+state.gameOver+" status: "+state.gameState)
 }
 
 /*
 	Returns true if the previous state is different from the current one.
 */
 Grid.prototype.differentState = function() {
-		
+	// Check where all the tiles in the movement map are going, if they're staying in place,
+	// then the state is the same
+	for (var i = 0; i < this.moveMap.length; i++) {
+		if(this.moveMap[i]) {
+			if(this.moveMap[i].oldPos.x != this.moveMap[i].newPos.x || this.moveMap[i].oldPos.y != this.moveMap[i].newPos.y)
+				return true;
+		}
+	};
+	return false;
 };
 
 /*
@@ -235,9 +233,11 @@ Grid.prototype.gameOver = function() {
 	if(!free.length)
 		return {gameOver: true, gameState: "loss"};
 	else {
-		this.eachCell(0, function(x,y,tile) {
-			if(tile.level == 10)
-				return {gameOver: true, gameState: "win"};
+		this.eachCell(null, function(x,y,tile) {
+			if(tile) {
+				if(tile.level == 10)
+					return {gameOver: true, gameState: "win"};
+			}
 		});
 	};
 	return {gameOver: false, gameState: "live"};
