@@ -58,7 +58,7 @@ GraphicsManager.prototype.drawBoard = function() {
 	Contructs a 3D tile representation of a tile object.
 */
 GraphicsManager.prototype.makeTile3D = function(tile) {
-	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, Math.pow(1.9, tile.level)*thickness);
+	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, Math.pow(1.8, tile.level)*thickness);
 };
 
 /*
@@ -76,6 +76,7 @@ GraphicsManager.prototype.drawTiles = function(grid) {
 
 /*
 	Dynamically updates the scene to the new state of the grid.
+	TODO: optimize this
 */
 GraphicsManager.prototype.updateScene = function(grid) {
 	var self = this;
@@ -126,4 +127,15 @@ GraphicsManager.prototype.updateScene = function(grid) {
 	// 	self.drawBoard();
 	// 	clearInterval(id);
 	// }, 1);
+};
+
+/*
+	Draws the tile at the correct location (takes into account rotation angle)
+	Parameters:
+		- tile: a Tile object
+		- translation: must be a tuple {x,y,z}
+	TODO: implement this, replace all occurrences of iso.add with GraphicsManager.add
+*/
+GraphicsManager.prototype.add = function(tile, translation) {
+
 };
