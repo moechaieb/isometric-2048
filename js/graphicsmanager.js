@@ -25,9 +25,9 @@ var elevation = 2;
 var space = 0.25;
 var viewAngle = 0; //to be used later when implementing rotating the board
 var boardcolors = [new Color(64,64,64), new Color(0,0,0)];
-var progression = [new Color(255,255,255), new Color(221,178,152), new Color(205,115,104), new Color(255,84,63),
-			   	   new Color(111,225,118), new Color(71,63,189), new Color(95,241,124), new Color(0,249,138),
-			       new Color(0,249,255), new Color(208,21,139), new Color(95,241,9)];
+var progression = [new Color(230,230,230), new Color(220,180,160), new Color(210,120,110), new Color(255,50,50),
+			   	   new Color(255,0,0), new Color(255,255,150), new Color(255,230,110), new Color(255,210,50),
+			       new Color(255,195,15), new Color(230,150,60), new Color(230,110,25)];
 
 /*
 	Constucts a GraphicsManager object, wrapping an Isomer object
@@ -99,6 +99,7 @@ GraphicsManager.prototype.updateScene = function(grid) {
 			dys[i] = 0;
 		};	
 	};
+	//Animation phase 1: move all tiles to their positions and 'drop' new tile
 	var id = setInterval(function() {
 		self.iso.canvas.clear();
 		self.drawBoard();
@@ -116,4 +117,5 @@ GraphicsManager.prototype.updateScene = function(grid) {
 		};
 		c++;
 	}, 1);
+	//Animation phase 2: grow all tiles to their respective levels
 };
