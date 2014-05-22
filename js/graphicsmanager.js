@@ -84,9 +84,6 @@ GraphicsManager.prototype.updateScene = function(grid) {
 		var dxs = [];
 		var dys = [];
 		var tile3Ds = [];
-		var newXs = [];
-		var newYs = [];
-		var gridCells = [];
 		var c = 0;
 		if(grid.newTile) {
 			var newTile = this.makeTile3D(grid.newTile);
@@ -114,9 +111,8 @@ GraphicsManager.prototype.updateScene = function(grid) {
 					dys[i] += (grid.moveMap[i].newPos.y-(grid.moveMap[i].oldPos.y))/refreshRate;
 				};
 			};
-			if(c === refreshRate*(squareSide+space)){
+			if(c === refreshRate*(squareSide+space))
 				clearInterval(id);
-			};
 			c++;
 		}, 1);
 		//Animation phase 2: grow all tiles to their respective levels
@@ -127,6 +123,7 @@ GraphicsManager.prototype.updateScene = function(grid) {
 		// 	clearInterval(id);
 		// }, 1);
 	};
+	return 1;
 };
 
 /*

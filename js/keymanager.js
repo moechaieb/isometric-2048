@@ -15,10 +15,22 @@ function KeyManager(gpx, grid) {
 */
 KeyManager.prototype.bind = function () {
 	var self = this;
-	Mousetrap.bind(['up', 'w'], function() {self.trigger(0);});
-	Mousetrap.bind(['down', 's'], function() {self.trigger(2);});
-	Mousetrap.bind(['left', 'a'], function() {self.trigger(3);});
-	Mousetrap.bind(['right', 'd'], function() {self.trigger(1);});	
+	$(document).keydown(function(e) {
+		switch(e.keyCode) {
+			case 38://up
+				self.trigger(0);
+				break;
+			case 39://right
+				self.trigger(1);
+				break;
+			case 40://down
+				self.trigger(2);
+				break;
+			case 37://left
+				self.trigger(3);
+				break;
+		};
+	});
 };
 
 /*
