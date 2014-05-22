@@ -20,7 +20,7 @@ var Color = Isomer.Color;
 var squareSide = 1.4;
 var gridSize = 4;
 var thickness = 0.075;
-var refreshRate = 3.5;
+var refreshRate = 4.5;
 var elevation = 2;
 var space = 0.6;
 var center; //to be used later when implementing rotating the board

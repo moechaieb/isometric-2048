@@ -4,6 +4,10 @@
 *
 *****************************************************/
 
+* {
+	cursor: default;
+}
+
 body {
 	font-family: 'Source Sans Pro';
 	width: 100%;
@@ -62,6 +66,7 @@ footer {
 
 footer a {
 	color: #222;
+	cursor: pointer;
 }
 
 .newgame {
@@ -87,6 +92,7 @@ footer a {
 	left: 50%;
 	width: 200px;
 	margin-left: 100px;
+	cursor: default;
 }
 
 #game {
