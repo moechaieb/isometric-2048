@@ -4,7 +4,7 @@
 		<link rel="stylesheet" type="text/css" href="./style.css">
 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 	</head>
-	<body>
+	<body onload="newGame();">
 		<script src="./js/isomer.min.js"></script>
 		<script src="./js/mousetrap.min.js"></script>
 		<script type="text/javascript" src="./js/tile.js"></script>
@@ -12,15 +12,19 @@
 		<script type="text/javascript" src="./js/graphicsmanager.js"></script>
 		<script type="text/javascript" src="./js/grid.js"></script>
 		<script type="text/javascript" src="./js/game.js"></script>
-		<header>Isometric 2048<sub>alpha</sub></header>
+		<header>Isometric 2048</header>
 		<div class="main">
 			<canvas width="1200" height="1400" id="game">
 			<script>
+			function newGame() {
 				window.requestAnimationFrame(function () {
   					new Game();
+  					document.getElementsByClassName('score')[0].innerHTML = "Score: 0";
 				});
+			};
 			</script>
 			</canvas>
+			<a class="newgame" onclick="newGame();">New Game</a>
 			<p class="score">Score: 0</p>
 			<h2>How do I play?</h2>
 			<p>

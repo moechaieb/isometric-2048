@@ -31,8 +31,8 @@ header, h1 , h2, p {
 
 header {
 	width: 100%;
-	height: 100px;
-	line-height: 100px;
+	height: 90px;
+	line-height: 90px;
 	text-align: center;
 	background-color: #ffc40d;
 	font-size: 4em;
@@ -64,15 +64,26 @@ footer a {
 	color: #222;
 }
 
-sub {
-	font-size: 0.4em;
+.newgame {
+	position: absolute;
+	font-size: 1.5em;
+	font-weight: bold;
+	top: 715px;
+	left: 50%;
+	width: 200px;
+	margin-left: -200px;
+	cursor: pointer;
+}
+
+.newgame:HOVER {
+	color: blue;
 }
 
 .score {
 	position: absolute;
 	font-size: 1.5em;
 	font-weight: bold;
-	top: 725px;
+	top: 715px;
 	left: 50%;
 	width: 200px;
 	margin-left: 100px;
