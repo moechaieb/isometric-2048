@@ -58,7 +58,7 @@ GraphicsManager.prototype.drawBoard = function() {
 	Contructs a 3D tile representation of a tile object.
 */
 GraphicsManager.prototype.makeTile3D = function(tile) {
-	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, Math.pow(1.8, tile.level)*thickness);
+	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, Math.pow(2, tile.level)*thickness);
 };
 
 /*
@@ -103,16 +103,16 @@ GraphicsManager.prototype.updateScene = function(grid) {
 		var id = setInterval(function() {
 			self.iso.canvas.clear();
 			self.drawBoard();
+			if(grid.newTile) {
+				self.iso.add(newTile.translate(0,0,elevation*(1-dn)), progression[grid.newTile.level]);
+				dn += 1/(refreshRate*(squareSide+space));
+			};
 			for (var i = grid.moveMap.length-1; i >= 0; i--) {
 				if(grid.moveMap[i]) {
 					self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[grid.moveMap[i].level]);
 					dxs[i] += (grid.moveMap[i].newPos.x-(grid.moveMap[i].oldPos.x))/refreshRate;
 					dys[i] += (grid.moveMap[i].newPos.y-(grid.moveMap[i].oldPos.y))/refreshRate;
 				};
-			};
-			if(grid.newTile) {
-				self.iso.add(newTile.translate(0,0,elevation*(1-dn)), progression[grid.newTile.level]);
-				dn += 1/(refreshRate*(squareSide+space));
 			};
 			if(c === refreshRate*(squareSide+space)){
 				clearInterval(id);
