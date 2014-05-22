@@ -5,7 +5,7 @@
 		<meta name="description" content="A less flat version of 2048">
 		<meta name="keywords" content="2048, game">
 		<meta name="author" content="Mohamed Adam Chaieb">
-		 <meta property="og:title" content="Isometric 2048"/>
+		<meta property="og:title" content="Isometric 2048"/>
   		<meta property="og:site_name" content="Isometric 2048"/>
   		<meta property="og:description" content="A less flat version of 2048."/>
   		<meta property="og:image" content=""/>
@@ -19,7 +19,8 @@
   		ga('create', 'UA-51291306-1', 'themoechaieb.com');
   		ga('send', 'pageview');
 
-</script>
+	</script>
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	</head>
 	<body onload="newGame();">
 		<script src="./js/isomer.min.js"></script>
@@ -39,6 +40,17 @@
   					document.getElementsByClassName('score')[0].innerHTML = "Score: 0";
 				});
 			};
+
+			/*
+				This small script prevents the page from scrolling when a key is pressed.
+			*/
+			$(document).keydown(function(e) {
+      			if($.inArray(e.which, [33,34,35,36,37,38,39,40]) > -1) {
+          			e.preventDefault();
+          			return false;
+      			};
+      			return true;
+			});
 			</script>
 			</canvas>
 			<a class="newgame" onclick="location.reload();">New Game</a>
