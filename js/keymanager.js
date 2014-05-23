@@ -17,7 +17,6 @@ function KeyManager(gpx, grid) {
 	Binds the key handler to the 'keydown' event.
 */
 KeyManager.prototype.bind = function() {
-	console.log("BINDED")
 	var self = this;
 	Mousetrap.bind(['up', "w"], function() {self.update(0);});
 	Mousetrap.bind(['right', "d"], function() {self.update(1);});
