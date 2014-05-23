@@ -40,16 +40,15 @@
   					document.getElementsByClassName('score')[0].innerHTML = "Score: 0";
 				});
 			};
-
-			/*
-				This small script prevents the page from scrolling when a key is pressed.
-			*/
 			$(document).keydown(function(e) {
-      			if($.inArray(e.which, [33,34,35,36,37,38,39,40]) > -1) {
-          			e.preventDefault();
-          			return false;
-      			};
-      			return true;
+				/*
+					This small script prevents the page from scrolling when a key is pressed.
+				*/
+				if($.inArray(e.which, [33,34,35,36,37,38,39,40]) > -1) {
+       				e.preventDefault();
+       				return false;
+    			};
+    			return true;
 			});
 			</script>
 			</canvas>

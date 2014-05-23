@@ -5,6 +5,9 @@
 *
 *****************************************************/
 
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
 /*
 	Convenient renames.
 */
@@ -20,8 +23,8 @@ var Color = Isomer.Color;
 var squareSide = 1.4;
 var gridSize = 4;
 var thickness = 0.075;
-var refreshRate = 4.5;
-var elevation = 2;
+var refreshRate = 3;
+var elevation = 3;
 var space = 0.6;
 var center; //to be used later when implementing rotating the board
 var viewAngle = 0; //to be used later when implementing rotating the board
@@ -33,8 +36,15 @@ var progression = [new Color(230,230,230), new Color(220,180,160), new Color(210
 /*
 	Constucts a GraphicsManager object, wrapping an Isomer object
 */
-function GraphicsManager() {
+function GraphicsManager(grid) {
 	this.iso = new Isomer(document.getElementById("game"));
+	this.grid = grid;
+	this.dxs = [];
+	this.dys = [];
+	this.dn = 0;
+	this.tile3Ds = [];
+	this.refreshCounter = 1;
+	this.keymanager = null;
 };
 
 /*
@@ -74,56 +84,45 @@ GraphicsManager.prototype.drawTiles = function(grid) {
 	});
 };
 
+GraphicsManager.prototype.preUpdate = function() {
+	for (var i = this.grid.moveMap.length-1; i >= 0; i--) {
+		if(this.grid.moveMap[i]) {
+			this.tile3Ds[i] = this.makeTile3D({x: this.grid.moveMap[i].oldPos.x, y: this.grid.moveMap[i].oldPos.y, level: this.grid.moveMap[i].level});
+			this.dxs[i] = 0;
+			this.dys[i] = 0;
+		};	
+	};
+};
+
 /*
 	Dynamically updates the scene to the new state of the grid.
 	TODO: optimize this
 */
-GraphicsManager.prototype.updateScene = function(grid) {
-	if(grid.differentState()) {
-		var self = this;
-		var dxs = [];
-		var dys = [];
-		var tile3Ds = [];
-		var c = 0;
-		if(grid.newTile) {
-			var newTile = this.makeTile3D(grid.newTile);
-			var dn = 0;
-		};
-		for (var i = grid.moveMap.length-1; i >= 0; i--) {
-			if(grid.moveMap[i]) {
-				tile3Ds[i] = this.makeTile3D({x: grid.moveMap[i].oldPos.x, y: grid.moveMap[i].oldPos.y, level: grid.moveMap[i].level});
-				dxs[i] = 0;
-				dys[i] = 0;
-			};	
-		};
-		//Animation phase 1: move all tiles to their positions and 'drop' new tile
-		var id = setInterval(function() {
-			self.iso.canvas.clear();
-			self.drawBoard();
-			if(grid.newTile) {
-				self.iso.add(newTile.translate(0,0,elevation*(1-dn)), progression[grid.newTile.level]);
-				dn += 1/(refreshRate*(squareSide+space));
-			};
-			for (var i = grid.moveMap.length-1; i >= 0; i--) {
-				if(grid.moveMap[i]) {
-					self.iso.add(tile3Ds[i].translate(dxs[i],dys[i],0), progression[grid.moveMap[i].level]);
-					dxs[i] += (grid.moveMap[i].newPos.x-(grid.moveMap[i].oldPos.x))/refreshRate;
-					dys[i] += (grid.moveMap[i].newPos.y-(grid.moveMap[i].oldPos.y))/refreshRate;
-				};
-			};
-			if(c === refreshRate*(squareSide+space))
-				clearInterval(id);
-			c++;
-		}, 1);
-		//Animation phase 2: grow all tiles to their respective levels
-		// id = setInterval(function() {
-		// 	console.log("Phase 2")
-		// 	self.iso.canvas.clear();
-		// 	self.drawBoard();
-		// 	clearInterval(id);
-		// }, 1);
+GraphicsManager.prototype.updateScene = function() {
+	var id = window.requestAnimationFrame(this.updateScene.bind(this));
+	this.iso.canvas.clear();
+	this.drawBoard();
+	if(this.grid.newTile) {
+		this.iso.add(this.makeTile3D(this.grid.newTile).translate(0,0,elevation*(1-this.dn)), progression[this.grid.newTile.level]);
+		this.dn += 1/(refreshRate*(squareSide+space));
 	};
-	return 1;
+	for (var i = this.grid.moveMap.length-1; i >= 0; i--) {
+		if(this.grid.moveMap[i]) {
+			this.iso.add(this.tile3Ds[i].translate(this.dxs[i],this.dys[i],0), progression[this.grid.moveMap[i].level]);
+			this.dxs[i] += (this.grid.moveMap[i].newPos.x-(this.grid.moveMap[i].oldPos.x))/refreshRate;
+			this.dys[i] += (this.grid.moveMap[i].newPos.y-(this.grid.moveMap[i].oldPos.y))/refreshRate;
+		};
+	};
+	if(this.refreshCounter === refreshRate*(squareSide+space)+1) {
+		this.refreshCounter = 0;
+		this.dxs = [];
+		this.dys = [];
+		this.dn = 0;
+		this.tile3Ds = [];
+		this.keymanager.bind();
+		window.cancelAnimationFrame(id);
+	};
+	this.refreshCounter++;
 };
 
 /*

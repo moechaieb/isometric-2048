@@ -4,6 +4,9 @@
 *
 *****************************************************/
 
+/*
+	Constructs a new KeyManager object.
+*/
 function KeyManager(gpx, grid) {
 	this.graphicsManager = gpx;
 	this.gameGrid = grid;
@@ -11,35 +14,30 @@ function KeyManager(gpx, grid) {
 }
 
 /*
-	Binds keys to key listeners.
+	Binds the key handler to the 'keydown' event.
 */
-KeyManager.prototype.bind = function () {
+KeyManager.prototype.bind = function() {
+	console.log("BINDED")
 	var self = this;
-	$(document).keydown(function(e) {
-		switch(e.keyCode) {
-			case 38://up
-				self.trigger(0);
-				break;
-			case 39://right
-				self.trigger(1);
-				break;
-			case 40://down
-				self.trigger(2);
-				break;
-			case 37://left
-				self.trigger(3);
-				break;
-		};
-	});
+	Mousetrap.bind(['up', "w"], function() {self.update(0);});
+	Mousetrap.bind(['right', "d"], function() {self.update(1);});
+	Mousetrap.bind(['down', "s"], function() {self.update(2);});
+	Mousetrap.bind(['left', "a"], function() {self.update(3);});
 };
 
 /*
 	This function is triggered when a key is pressed.
 */
-KeyManager.prototype.trigger = function(n) {
+KeyManager.prototype.update = function(n) {
+	var self = this;
 	this.gameGrid.update(n);
-	this.graphicsManager.updateScene(this.gameGrid);
+	if(this.gameGrid.differentState()) {
+		Mousetrap.reset();
+		this.graphicsManager.preUpdate();
+		this.graphicsManager.updateScene();
+	};
 	this.updateScore();
+
 };
 
 /*
