@@ -44,5 +44,5 @@ KeyManager.prototype.update = function(n) {
 */
 KeyManager.prototype.updateScore = function() {
 	var score = document.getElementsByClassName('score')[0];
-	score.innerHTML = "Score: "+this.gameGrid.score;
+	$(".score").html("Score: "+this.gameGrid.score);
 };
