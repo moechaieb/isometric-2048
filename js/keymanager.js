@@ -24,7 +24,7 @@ InputManager.prototype.bind = function() {
 	Mousetrap.bind(['left', "a"], function() {self.update(3);});
 	Mousetrap.bind(['enter', "space"], function() {self.rotate()});
 	$(".rotate").click(function() {self.rotate()});
-	$(".newGame").click(function() {new Game(); $(".score").html("Score: 0");}); //maybe fix this?
+	$(".newGame").click(function() {new Game(); $(".score").html("Score: 0");});
 };
 
 InputManager.prototype.unbind = function() {

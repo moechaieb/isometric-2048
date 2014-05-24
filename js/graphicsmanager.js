@@ -23,7 +23,7 @@ var Color = Isomer.Color;
 var squareSide = 1.4;
 var gridSize = 4;
 var thickness = 0.1;
-var refreshRate = 3;
+var refreshRate = 3.5;
 var elevation = 3;
 var space = 0.6;
 var center = Point(2*squareSide+2.5*space, 2*squareSide+2.5*space, 0); //to be used later when implementing rotating the board
@@ -123,6 +123,7 @@ GraphicsManager.prototype.updateScene = function() {
 		this.dn = 0;
 		this.tile3Ds = [];
 		this.keymanager.bind();
+		this.drawTiles();
 		window.cancelAnimationFrame(id);
 	};
 	this.refreshCounter++;

@@ -236,5 +236,10 @@ Grid.prototype.gameOver = function() {
 	to {0,0}).
 */
 Grid.prototype.addToMoveMap = function(move) {
-	this.moveMap[move.newPos.x+move.newPos.y*gridSize] = move;
+	var index = move.newPos.x+move.newPos.y*gridSize;
+	while(this.moveMap[index])
+		index--;
+	if(index < 0)
+		this.moveMap.push(move);
+	else this.moveMap[index] = move;
 };
