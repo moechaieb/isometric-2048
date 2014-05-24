@@ -38,29 +38,25 @@
 			<canvas width="1200" height="1400" id="game">
 			<script>
 			$(document).ready(function() {
-				new Game();
-			});
-
-			function newGame() {
 				window.requestAnimationFrame(function () {
   					new Game();
 				});
-			};
-			$(document).keydown(function(e) {
-				/*
-					This small script prevents the page from scrolling when a key is pressed.
-				*/
-				if($.inArray(e.which, [33,34,35,36,37,38,39,40]) > -1) {
-       				e.preventDefault();
-       				return false;
-    			};
-    			return true;
+				$(document).keydown(function(e) {
+					/*
+						This small script prevents the page from scrolling when a key is pressed.
+					*/
+					if($.inArray(e.which, [33,34,35,36,37,38,39,40]) > -1) {
+       					e.preventDefault();
+       					return false;
+    				};
+    				return true;
+				});
 			});
 			</script>
 			</canvas>
 			<a class="newgame">New Game</a>
 			<p class="score">Score: 0</p>
-			<a class="rotate"><i class="fa fa-undo fa-3x"></i></a>
+			<a class="rotate"><i class="fa fa-undo fa-2x"></i></a>
 			<h2>How do I play?</h2>
 			<p>
 				Use the arrow keys to move the tiles. When two identical tiles collide, they merge into a taller one! You can rotate the grid to get a peek from other angles!

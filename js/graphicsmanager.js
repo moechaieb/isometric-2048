@@ -132,7 +132,7 @@ GraphicsManager.prototype.updateScene = function() {
 	Prepares the structures before rotating the scene. Must be called before rotateScene()!
 */
 GraphicsManager.prototype.preRotate = function(dir) {
-	this.dn = (2*Math.PI)/(refreshRate*30);
+	this.dn = Math.PI/(refreshRate*15);
 };
 
 /*
@@ -145,7 +145,6 @@ GraphicsManager.prototype.rotateScene = function() {
 	this.drawBoard();
 	this.drawTiles();
 	if(this.refreshCounter === refreshRate*30) {
-		console.log("BAM 2");
 		this.keymanager.bind();
 		this.refreshCounter = 0;
 		this.dn = 0;
@@ -161,7 +160,6 @@ GraphicsManager.prototype.rotateScene = function() {
 		- translation: must be a tuple {x,y,z}
 		- rotation: rotation must be an angle, in Radian
 		- color: an Isomer color object
-	TODO: implement this, replace all occurrences of iso.add with GraphicsManager.add
 */
 GraphicsManager.prototype.add = function(shape, translation, color) {
 	if(!translation)

@@ -73,6 +73,8 @@ footer a {
 	left: 50%;
 	margin-left: -200px;
 	cursor: pointer;
+	height: 30px;
+	line-height: 30px;
 }
 
 .newgame:HOVER {
@@ -86,6 +88,8 @@ footer a {
 	top: 715px;
 	left: 50%;
 	width: 200px;
+	height: 30px;
+	line-height: 30px;
 	margin-left: 100px;
 }
 
@@ -101,9 +105,11 @@ footer a {
 	color: #222;
 	width: 20px;
 	position: absolute;
-	top: 695px;
+	top: 715px;
 	left: 50%;
-	margin-left: -270px;
+	margin-left: -260px;
+	height: 30px;
+	line-height: 30px;
 }
 
 .rotate:HOVER {

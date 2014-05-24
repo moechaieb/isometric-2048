@@ -23,7 +23,7 @@ InputManager.prototype.bind = function() {
 	Mousetrap.bind(['down', "s"], function() {self.update(2);});
 	Mousetrap.bind(['left', "a"], function() {self.update(3);});
 	$(".rotate").click(function() {self.rotate()});
-	$(".newGame").click(function() {newGame();}); //maybe fix this?
+	$(".newGame").click(function() {new Game(); $(".score").html("Score: 0");}); //maybe fix this?
 };
 
 InputManager.prototype.unbind = function() {
@@ -61,6 +61,5 @@ InputManager.prototype.rotate = function() {
 	Updates the score on the screen
 */
 InputManager.prototype.updateScore = function() {
-	var score = document.getElementsByClassName('score')[0];
 	$(".score").html("Score: "+this.gameGrid.score);
 };
