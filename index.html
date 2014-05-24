@@ -25,7 +25,7 @@
 		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	</head>
-	<body onload="newGame();">
+	<bodywd>
 		<script src="./js/isomer.min.js"></script>
 		<script src="./js/mousetrap.min.js"></script>
 		<script type="text/javascript" src="./js/tile.js"></script>
@@ -45,7 +45,7 @@
 					/*
 						This small script prevents the page from scrolling when a key is pressed.
 					*/
-					if($.inArray(e.which, [33,34,35,36,37,38,39,40]) > -1) {
+					if($.inArray(e.which, [13,32,33,34,35,36,37,38,39,40]) > -1) {
        					e.preventDefault();
        					return false;
     				};
@@ -59,7 +59,7 @@
 			<a class="rotate"><i class="fa fa-undo fa-2x"></i></a>
 			<h2>How do I play?</h2>
 			<p>
-				Use the arrow keys to move the tiles. When two identical tiles collide, they merge into a taller one! You can rotate the grid to get a peek from other angles!
+				Use the arrow keys to move the tiles. When two identical tiles collide, they merge into a taller one! You can rotate the grid to get a peek from other angles, by pressing enter/space, or by clicking on the button above.
 			</p>
 			<footer>
 				Made with <a href="http://jdan.github.io/isomer/">Isomer</a>, by <a href="http://themoechaieb.com">Mohamed Adam Chaieb</a>. Hosted on <a href="https://github.com/mac-adam-chaieb/Isometric-2048">github</a>.

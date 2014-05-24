@@ -223,6 +223,7 @@ Grid.prototype.differentState = function() {
 };
 
 /*
+	Checks whether the game is over or not.
 	TODO: implement this
 */
 Grid.prototype.gameOver = function() {
@@ -233,8 +234,6 @@ Grid.prototype.gameOver = function() {
 	Inserts the movement object in place so that the moveMap is sorted
 	from the largest coordinates to the smaller coordinates (from {3,3}
 	to {0,0}).
-	TODO: implement this, then replace all occurences of this.moveMap.push with
-	this.addToMoveMap	
 */
 Grid.prototype.addToMoveMap = function(move) {
 	this.moveMap[move.newPos.x+move.newPos.y*gridSize] = move;
