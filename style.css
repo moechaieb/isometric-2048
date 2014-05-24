@@ -4,16 +4,13 @@
 *
 *****************************************************/
 
-* {
-	cursor: default;
-}
-
 body {
 	font-family: 'Source Sans Pro', sans-serif;
 	width: 100%;
 	background-color: #a1cee0;
 	margin: 0;
 	display: block;
+	cursor: default;
 }
 
 .main {
@@ -27,7 +24,6 @@ p, footer {
 }
 
 header, h1 , h2, p {
-	width: 100%;
 	padding-bottom: 5px;
 	margin: 0;
 	display: block;
@@ -75,7 +71,6 @@ footer a {
 	font-weight: bold;
 	top: 715px;
 	left: 50%;
-	width: 200px;
 	margin-left: -200px;
 	cursor: pointer;
 }
@@ -92,7 +87,6 @@ footer a {
 	left: 50%;
 	width: 200px;
 	margin-left: 100px;
-	cursor: default;
 }
 
 #game {
@@ -100,4 +94,18 @@ footer a {
 	display: block;
 	width: 600px;
 	height: 700px;
+}
+
+.rotate {
+	cursor: pointer;
+	color: #222;
+	width: 20px;
+	position: absolute;
+	top: 695px;
+	left: 50%;
+	margin-left: -270px;
+}
+
+.rotate:HOVER {
+	color: blue;
 }

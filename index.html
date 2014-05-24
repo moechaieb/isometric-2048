@@ -23,6 +23,7 @@
 
 		</script>
 		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	</head>
 	<body onload="newGame();">
 		<script src="./js/isomer.min.js"></script>
@@ -38,7 +39,6 @@
 			<script>
 			$(document).ready(function() {
 				new Game();
-
 			});
 
 			function newGame() {
@@ -58,11 +58,12 @@
 			});
 			</script>
 			</canvas>
-			<a class="newgame" onclick="location.reload();">New Game</a>
+			<a class="newgame">New Game</a>
 			<p class="score">Score: 0</p>
+			<a class="rotate"><i class="fa fa-undo fa-3x"></i></a>
 			<h2>How do I play?</h2>
 			<p>
-				Use the arrow keys to move the tiles. When two identical tiles collide, they merge into one!
+				Use the arrow keys to move the tiles. When two identical tiles collide, they merge into a taller one! You can rotate the grid to get a peek from other angles!
 			</p>
 			<footer>
 				Made with <a href="http://jdan.github.io/isomer/">Isomer</a>, by <a href="http://themoechaieb.com">Mohamed Adam Chaieb</a>. Hosted on <a href="https://github.com/mac-adam-chaieb/Isometric-2048">github</a>.

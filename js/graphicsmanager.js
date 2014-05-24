@@ -22,12 +22,11 @@ var Color = Isomer.Color;
 */
 var squareSide = 1.4;
 var gridSize = 4;
-var thickness = 0.075;
+var thickness = 0.1;
 var refreshRate = 3;
 var elevation = 3;
 var space = 0.6;
-var center; //to be used later when implementing rotating the board
-var viewAngle = 0; //to be used later when implementing rotating the board
+var center = Point(2*squareSide+2.5*space, 2*squareSide+2.5*space, 0); //to be used later when implementing rotating the board
 var boardcolors = [new Color(64,64,64), new Color(0,0,0)];
 var progression = [new Color(230,230,230), new Color(220,180,160), new Color(210,120,110), new Color(255,70,70),
 			   	   new Color(255,0,0), new Color(255,255,150), new Color(255,230,110), new Color(255,210,50),
@@ -45,6 +44,7 @@ function GraphicsManager(grid) {
 	this.tile3Ds = [];
 	this.refreshCounter = 1;
 	this.keymanager = null;
+	this.angle = 0;
 };
 
 /*
@@ -52,14 +52,14 @@ function GraphicsManager(grid) {
 */
 GraphicsManager.prototype.drawBoard = function() {
 	//add board
-	this.iso.add(Shape.Prism(Point(-thickness,-thickness,0), 4*squareSide+5*space, 4*squareSide+5*space, thickness), boardcolors[1]);
+	this.add(Shape.Prism(Point(-thickness,-thickness,0), 4*squareSide+5*space, 4*squareSide+5*space, thickness), null, boardcolors[1]);
 	//initialize the squares
 	for (var i = 3; i >= 0; i--) {
 		for (var j = 3; j >= 0; j--) {
-			this.iso.add(new Path([Point(i*(squareSide+space)+space, j*(squareSide+space)+space, 0), 
+			this.add(new Path([Point(i*(squareSide+space)+space, j*(squareSide+space)+space, 0), 
 				Point(i*(squareSide+space)+space+squareSide, j*(space+squareSide)+space, 0),
 				Point(i*(squareSide+space)+space+squareSide, j*(space+squareSide)+space+squareSide, 0),
-				Point(i*(squareSide+space)+space, j*(space+squareSide)+squareSide+space, 0)]), boardcolors[0]);
+				Point(i*(squareSide+space)+space, j*(space+squareSide)+squareSide+space, 0)]), null, boardcolors[0]);
 		};
 	};
 };
@@ -74,16 +74,19 @@ GraphicsManager.prototype.makeTile3D = function(tile) {
 /*
 	Draws all tiles in the grid on the board.
 */
-GraphicsManager.prototype.drawTiles = function(grid) {
+GraphicsManager.prototype.drawTiles = function() {
 	var self = this;
 	this.iso.canvas.clear();
 	this.drawBoard();
-	grid.eachCell(null, function(x,y,tile) {
+	this.grid.eachCell(null, function(x,y,tile) {
 		if(tile)
-			self.iso.add(self.makeTile3D(tile),progression[tile.level]);
+			self.add(self.makeTile3D(tile), null, progression[tile.level]);
 	});
 };
 
+/*
+	Prepares structures for updateScene method. Must be called before updateScene()!
+*/
 GraphicsManager.prototype.preUpdate = function() {
 	for (var i = this.grid.moveMap.length-1; i >= 0; i--) {
 		if(this.grid.moveMap[i]) {
@@ -103,12 +106,12 @@ GraphicsManager.prototype.updateScene = function() {
 	this.iso.canvas.clear();
 	this.drawBoard();
 	if(this.grid.newTile) {
-		this.iso.add(this.makeTile3D(this.grid.newTile).translate(0,0,elevation*(1-this.dn)), progression[this.grid.newTile.level]);
+		this.add(this.makeTile3D(this.grid.newTile), {x:0, y:0,z: elevation*(1-this.dn)}, progression[this.grid.newTile.level]);
 		this.dn += 1/(refreshRate*(squareSide+space));
 	};
 	for (var i = this.grid.moveMap.length-1; i >= 0; i--) {
 		if(this.grid.moveMap[i]) {
-			this.iso.add(this.tile3Ds[i].translate(this.dxs[i],this.dys[i],0), progression[this.grid.moveMap[i].level]);
+			this.add(this.tile3Ds[i],{x:this.dxs[i], y:this.dys[i], z:0}, progression[this.grid.moveMap[i].level]);
 			this.dxs[i] += (this.grid.moveMap[i].newPos.x-(this.grid.moveMap[i].oldPos.x))/refreshRate;
 			this.dys[i] += (this.grid.moveMap[i].newPos.y-(this.grid.moveMap[i].oldPos.y))/refreshRate;
 		};
@@ -126,12 +129,42 @@ GraphicsManager.prototype.updateScene = function() {
 };
 
 /*
+	Prepares the structures before rotating the scene. Must be called before rotateScene()!
+*/
+GraphicsManager.prototype.preRotate = function(dir) {
+	this.dn = (2*Math.PI)/(refreshRate*30);
+};
+
+/*
+	Rotates the scene to the right or left and then back to its initial position.
+*/
+GraphicsManager.prototype.rotateScene = function() {
+	var id = window.requestAnimationFrame(this.rotateScene.bind(this));
+	this.iso.canvas.clear();
+	this.angle += this.dn;
+	this.drawBoard();
+	this.drawTiles();
+	if(this.refreshCounter === refreshRate*30) {
+		console.log("BAM 2");
+		this.keymanager.bind();
+		this.refreshCounter = 0;
+		this.dn = 0;
+		window.cancelAnimationFrame(id);
+	};
+	this.refreshCounter++;
+};
+
+/*
 	Draws the tile at the correct location (takes into account rotation angle)
 	Parameters:
 		- tile: a Tile object
 		- translation: must be a tuple {x,y,z}
+		- rotation: rotation must be an angle, in Radian
+		- color: an Isomer color object
 	TODO: implement this, replace all occurrences of iso.add with GraphicsManager.add
 */
-GraphicsManager.prototype.add = function(tile, translation) {
-
+GraphicsManager.prototype.add = function(shape, translation, color) {
+	if(!translation)
+		this.iso.add(shape.rotateZ(center, this.angle), color);
+	else this.iso.add(shape.rotateZ(center, this.angle).translate(translation.x, translation.y, translation.z), color);
 };

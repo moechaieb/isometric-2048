@@ -6,7 +6,7 @@ function Game() {
 	var gridSize = 4;
 	this.grid = new Grid();
 	this.graphicsManager = new GraphicsManager(this.grid);
-	this.keyManager = new KeyManager(this.graphicsManager, this.grid);
+	this.keyManager = new InputManager(this.graphicsManager, this.grid);
 	this.graphicsManager.keymanager = this.keyManager;
 	this.grid.init();
 	this.graphicsManager.drawBoard();
