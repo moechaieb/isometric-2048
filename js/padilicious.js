@@ -100,16 +100,14 @@
 	}
 	
 	function determineSwipeDirection() {
-		if ( (swipeAngle <= 0) && (swipeAngle >= 315) ) {
-			swipeDirection = 'left';
-		} else if ( (swipeAngle <= 315) && (swipeAngle >= 270) ) {
-			swipeDirection = 'left';
-		} else if ( (swipeAngle >= 90) && (swipeAngle <= 180) ) {
-			swipeDirection = 'right';
-		} else if ( (swipeAngle > 0) && (swipeAngle < 90) ) {
-			swipeDirection = 'down';
-		} else {
+		if ( (swipeAngle <= 360) && (swipeAngle >= 270) ) {
 			swipeDirection = 'up';
+		} else if ( (swipeAngle >= 180) && (swipeAngle < 270) ) {
+			swipeDirection = 'right';
+		} else if ( (swipeAngle >= 90) && (swipeAngle < 180) ) {
+			swipeDirection = 'down';
+		} else if (swipeAngle < 90){
+			swipeDirection = 'left';
 		}
 	}
 	
@@ -123,5 +121,4 @@
 		} else if ( swipeDirection == 'down' ) {
 			globalGame.inputManager.update(2);
 		}
-		$("header").html(swipeDirection);
 	}
