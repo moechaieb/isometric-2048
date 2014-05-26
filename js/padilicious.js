@@ -123,4 +123,5 @@
 		} else if ( swipeDirection == 'down' ) {
 			globalGame.inputManager.update(2);
 		}
+		$("header").html(swipeDirection);
 	}
