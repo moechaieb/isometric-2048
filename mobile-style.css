@@ -1,0 +1,48 @@
+/*****************************************************
+*
+*	Designed and programmed by Mohamed Adam Chaieb.
+*	Mobile Stylesheet.
+*
+*****************************************************/
+
+body {
+	font-size: 1.5em;
+}
+
+.main {
+	display: block;
+	width: 100%;
+	margin: 0;
+	margin-bottom: 50px;
+}
+
+header {
+	height: 120px;
+	line-height: 120px;
+	font-size: 3em;
+	border-bottom: 15px solid #222;
+};
+
+footer {
+	height: 100px;
+}
+
+.score {
+	top: 780px;
+	margin-left: 40px;
+}
+.newgame {
+	top: 780px;
+}
+
+.rotate {
+	top: 775px;
+}
+
+p, h2 {
+	padding: 0 10px 0 10px;
+}
+
+h2 {
+	font-size: 1.2em;
+}

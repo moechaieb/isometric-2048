@@ -2,6 +2,7 @@
 	<head>
 		<title>Isometric 2048</title>
 		<link rel="stylesheet" type="text/css" href="./style.css">
+		<link rel="stylesheet" type="text/css" media="only screen and (max-width: 640px), only screen and (max-device-width: 640px)" href="./mobile-style.css" />
 		<meta name="description" content="A less flat version of 2048">
 		<meta name="keywords" content="2048, game">
 		<meta name="author" content="Mohamed Adam Chaieb">
@@ -23,7 +24,7 @@
 
 		</script>
 		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-		<script src="./padilicious.js"></script>
+		<script src="./js/padilicious.js"></script>
 		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	</head>
 	<bodywd>
@@ -36,11 +37,12 @@
 		<script type="text/javascript" src="./js/game.js"></script>
 		<header>Isometric 2048</header>
 		<div class="main">
-			<canvas width="1200" height="1400" id="game">
+			<canvas width="1200" height="1400" id="game" ontouchstart="touchStart(event,'game');" ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);">
 			<script>
+			var globalGame;
 			$(document).ready(function() {
 				window.requestAnimationFrame(function () {
-  					new Game();
+  					globalGame = new Game();
 				});
 				$(document).keydown(function(e) {
 					/*

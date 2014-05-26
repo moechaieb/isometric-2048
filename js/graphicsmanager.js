@@ -122,7 +122,7 @@ GraphicsManager.prototype.updateScene = function() {
 		this.dys = [];
 		this.dn = 0;
 		this.tile3Ds = [];
-		this.keymanager.bind();
+		this.inputmanager.bind();
 		this.drawTiles();
 		window.cancelAnimationFrame(id);
 	};
@@ -133,7 +133,7 @@ GraphicsManager.prototype.updateScene = function() {
 	Prepares the structures before rotating the scene. Must be called before rotateScene()!
 */
 GraphicsManager.prototype.preRotate = function(dir) {
-	this.dn = Math.PI/(refreshRate*15);
+	this.dn = Math.PI/(refreshRate*12);
 };
 
 /*
@@ -145,8 +145,8 @@ GraphicsManager.prototype.rotateScene = function() {
 	this.angle += this.dn;
 	this.drawBoard();
 	this.drawTiles();
-	if(this.refreshCounter === refreshRate*30) {
-		this.keymanager.bind();
+	if(this.refreshCounter === refreshRate*24) {
+		this.inputmanager.bind();
 		this.refreshCounter = 0;
 		this.dn = 0;
 		window.cancelAnimationFrame(id);

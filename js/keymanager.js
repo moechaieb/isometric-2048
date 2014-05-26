@@ -14,7 +14,7 @@ function InputManager(gpx, grid) {
 }
 
 /*
-	Binds the key handler to the 'keydown' event.
+	Binds the input handlers.
 */
 InputManager.prototype.bind = function() {
 	var self = this;
@@ -27,11 +27,13 @@ InputManager.prototype.bind = function() {
 	$(".newGame").click(function() {new Game(); $(".score").html("Score: 0");});
 };
 
+/*
+	Unbinds input handlers.
+*/
 InputManager.prototype.unbind = function() {
 	Mousetrap.reset();
 	$(".rotate").unbind();
 	$(".newGame").unbind();
-	//unbind rotation buttons
 };
 
 /*

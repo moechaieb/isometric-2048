@@ -114,18 +114,13 @@
 	}
 	
 	function processingRoutine() {
-		var swipedElement = document.getElementById(triggerElementID);
 		if ( swipeDirection == 'left' ) {
-			// REPLACE WITH YOUR ROUTINES
-			swipedElement.style.backgroundColor = 'orange';
+			globalGame.inputManager.update(3);
 		} else if ( swipeDirection == 'right' ) {
-			// REPLACE WITH YOUR ROUTINES
-			swipedElement.style.backgroundColor = 'green';
+			globalGame.inputManager.update(1);
 		} else if ( swipeDirection == 'up' ) {
-			// REPLACE WITH YOUR ROUTINES
-			swipedElement.style.backgroundColor = 'maroon';
+			globalGame.inputManager.update(0);
 		} else if ( swipeDirection == 'down' ) {
-			// REPLACE WITH YOUR ROUTINES
-			swipedElement.style.backgroundColor = 'purple';
+			globalGame.inputManager.update(2);
 		}
 	}
