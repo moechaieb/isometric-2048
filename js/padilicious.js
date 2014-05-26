@@ -61,7 +61,7 @@
 			swipeLength = Math.round(Math.sqrt(Math.pow(curX - startX,2) + Math.pow(curY - startY,2)));
 			// if the user swiped more than the minimum length, perform the appropriate action
 			if ( swipeLength >= minLength ) {
-				caluculateAngle();
+				calculateAngle();
 				determineSwipeDirection();
 				processingRoutine();
 				touchCancel(event); // reset the variables
@@ -90,7 +90,7 @@
 		triggerElementID = null;
 	}
 	
-	function caluculateAngle() {
+	function calculateAngle() {
 		var X = startX-curX;
 		var Y = curY-startY;
 		var Z = Math.round(Math.sqrt(Math.pow(X,2)+Math.pow(Y,2))); //the distance - rounded - in pixels
@@ -100,13 +100,13 @@
 	}
 	
 	function determineSwipeDirection() {
-		if ( (swipeAngle <= 45) && (swipeAngle >= 0) ) {
+		if ( (swipeAngle <= 0) && (swipeAngle >= 315) ) {
 			swipeDirection = 'left';
-		} else if ( (swipeAngle <= 360) && (swipeAngle >= 315) ) {
+		} else if ( (swipeAngle <= 315) && (swipeAngle >= 270) ) {
 			swipeDirection = 'left';
-		} else if ( (swipeAngle >= 135) && (swipeAngle <= 225) ) {
+		} else if ( (swipeAngle >= 90) && (swipeAngle <= 180) ) {
 			swipeDirection = 'right';
-		} else if ( (swipeAngle > 45) && (swipeAngle < 135) ) {
+		} else if ( (swipeAngle > 0) && (swipeAngle < 90) ) {
 			swipeDirection = 'down';
 		} else {
 			swipeDirection = 'up';
