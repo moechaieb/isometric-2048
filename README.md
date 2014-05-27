@@ -1,8 +1,8 @@
-# [Isometric-2048](http://themoechaieb.com/Isometric-2048)
+# [Isometric 2048](http://themoechaieb.com/Isometric-2048)
 
 A less flat version of 2048, by [Mohamed Adam Chaieb](http://themoechaieb.com).
 
-A remake of [2048](http://gabrielecirulli.github.io/2048/), in isometric 3D.
+A remake, in isometric 3D, of [2048](http://gabrielecirulli.github.io/2048/), by [Gabriele Cirulli](http://gabrielecirulli.com/).
 
 ##Screenshot
 
