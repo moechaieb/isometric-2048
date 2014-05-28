@@ -190,6 +190,7 @@ Grid.prototype.update = function(dir) {
 	this.moveMap = [];
 	this.eachCell(dir, function(x,y,tile) {
 		if(tile) {
+			console.log(self.adjacentTiles(tile));
 			update = self.getMovePosition({x:x, y:y}, dir);
 			if(update.merge) {
 				self.score += Math.pow(2, tile.level+1);
@@ -205,6 +206,7 @@ Grid.prototype.update = function(dir) {
 	if(this.differentState())
 		this.generateTile();
 	else this.newTile = null;
+	console.log(this.gameOver());
 };
 
 /*
@@ -224,10 +226,46 @@ Grid.prototype.differentState = function() {
 
 /*
 	Checks whether the game is over or not.
-	TODO: implement this
+	TODO: fix this!
 */
 Grid.prototype.gameOver = function() {
-	
+	var self = this;
+	var adjacent = [];
+	var free = this.freePositions();
+	if(free.length > 0)
+		return false;
+	else {
+		//check if there exists two adjacent cells with the same level
+		this.eachCell(null, function(x,y,tile) {
+			if(tile) {
+				adjacent = self.adjacentTiles(tile);
+				for (var i = 0; i < adjacent.length; i++) {
+					if(adjacent[i].level == tile.level)
+						return false;
+				};
+			};
+		});
+		return true;
+	};
+};
+
+/*
+	Returns an array of adjacent tiles.
+*/
+Grid.prototype.adjacentTiles = function(tile) {
+	var adjacent = [];
+	if(this.tiles[tile.x+1]) {
+		if (this.tiles[tile.x+1][tile.y])
+			adjacent.push(this.tiles[tile.x+1][tile.y]);
+	} if (this.tiles[tile.x-1]) {
+		if (this.tiles[tile.x-1][tile.y])
+			adjacent.push(this.tiles[tile.x-1][tile.y]);
+	} if (this.tiles[tile.x][tile.y+1]) {
+		adjacent.push(this.tiles[tile.x][tile.y+1]);
+	} if (this.tiles[tile.x][tile.y-1]) {
+		adjacent.push(this.tiles[tile.x][tile.y-1]);
+	};
+	return adjacent;
 };
 
 /*
