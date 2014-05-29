@@ -20,12 +20,12 @@ var Color = Isomer.Color;
 	Important constants.
 	For animations to work, the following must hold: refreshRate*(squareSide+space) must be an integer
 */
-var squareSide = 1.4;
+var squareSide = 1.3;
 var gridSize = 4;
 var thickness = 0.1;
 var refreshRate = 3.5;
 var elevation = 3;
-var space = 0.6;
+var space = 0.7;
 var center = Point(2*squareSide+2.5*space, 2*squareSide+2.5*space, 0); //to be used later when implementing rotating the board
 var boardcolors = [new Color(64,64,64), new Color(0,0,0)];
 var progression = [new Color(230,230,230), new Color(220,180,160), new Color(210,120,110), new Color(255,70,70),
@@ -52,10 +52,10 @@ function GraphicsManager(grid) {
 */
 GraphicsManager.prototype.drawBoard = function() {
 	//add board
-	this.add(Shape.Prism(Point(-thickness,-thickness,0), 4*squareSide+5*space, 4*squareSide+5*space, thickness), null, boardcolors[1]);
+	this.add(Shape.Prism(Point(-thickness,-thickness,0), gridSize*squareSide+(gridSize+1)*space, gridSize*squareSide+(gridSize+1)*space, thickness), null, boardcolors[1]);
 	//initialize the squares
-	for (var i = 3; i >= 0; i--) {
-		for (var j = 3; j >= 0; j--) {
+	for (var i = gridSize-1; i >= 0; i--) {
+		for (var j = gridSize-1; j >= 0; j--) {
 			this.add(new Path([Point(i*(squareSide+space)+space, j*(squareSide+space)+space, 0), 
 				Point(i*(squareSide+space)+space+squareSide, j*(space+squareSide)+space, 0),
 				Point(i*(squareSide+space)+space+squareSide, j*(space+squareSide)+space+squareSide, 0),

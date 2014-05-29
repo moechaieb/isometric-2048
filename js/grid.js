@@ -179,7 +179,6 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 Grid.prototype.generateTile = function() {
 	this.newTile = new Tile(this.getRandomPosition(), Math.floor(Math.random()*2));
 	this.insertTile(this.newTile);
-	console.log(this.adjacentTiles(this.newTile));
 };
 
 /*
@@ -206,8 +205,8 @@ Grid.prototype.update = function(dir) {
 	if(this.differentState())
 		this.generateTile();
 	else this.newTile = null;
+	console.log(this.gameOver());
 	if(this.gameOver()) {
-		globalGame.inputManager.unbind();
 		globalGame.gameOverHandler();
 	};
 };
@@ -229,27 +228,28 @@ Grid.prototype.differentState = function() {
 
 /*
 	Checks whether the game is over or not.
-	TODO: fix this!
 */
 Grid.prototype.gameOver = function() {
 	var self = this;
 	var adjacent = [];
 	var free = this.freePositions();
-	if(free.length > 0)
-		return false;
-	else {
+	var g = true
+	if(free.length === 0) {
 		//check if there exists two adjacent cells with the same level
 		this.eachCell(null, function(x,y,tile) {
 			if(tile) {
 				adjacent = self.adjacentTiles(tile);
+				console.log(adjacent);
 				for (var i = 0; i < adjacent.length; i++) {
-					if(adjacent[i].level === tile.level)
-						return false;
+					if(adjacent[i].level === tile.level) {
+						g = false;
+						break;
+					};
 				};
 			};
 		});
-		return true;
-	};
+	} else g = false;
+	return g;
 };
 
 /*
@@ -275,6 +275,7 @@ Grid.prototype.adjacentTiles = function(tile) {
 	Inserts the movement object in place so that the moveMap is sorted
 	from the largest coordinates to the smaller coordinates (from {3,3}
 	to {0,0}).
+	TODO: might need some refactoring to sort sub-sequences by tile height.
 */
 Grid.prototype.addToMoveMap = function(move) {
 	var index = move.newPos.x+move.newPos.y*gridSize;
