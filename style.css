@@ -62,7 +62,7 @@ footer {
 	margin-left: -300px;
 	height: 40px;
 	width: 600px;
-	border-top: 1px solid #222;
+	border-top: 1px solid #888;
 	padding-left: 5px;
 	line-height: 40px;
 }
@@ -119,5 +119,49 @@ footer a {
 }
 
 .rotate:HOVER {
+	color: blue;
+}
+
+.gameOver {
+	display: none;
+	position: absolute;
+	width: 600px;
+	left: 50%;
+	top: 300px;
+	margin-left: -300px;
+	background-color: #ffc40d; 
+	border-radius: 20px;
+	opacity: 0.9;
+}
+
+.gameOver h1 {
+	border-radius: 20px 20px 0 0;
+	text-align: center;
+	height: 100px;
+	line-height: 100px;
+	font-size: 4em;
+}
+
+.gameOver p {
+	opacity: 1;
+	font-size: 2em;
+	width: 96%;
+	text-align: center;
+	margin: 2%;
+}
+
+.gameOver a {
+	position: relative;
+	font-weight: bold;
+	height: 100px;
+	line-height: 100px;
+	font-size: 2em;
+	text-align: center;
+	cursor: pointer;
+	left: 50%;
+	margin-left: -72px;
+}
+
+.gameOver a:HOVER {
 	color: blue;
 }

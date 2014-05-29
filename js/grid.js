@@ -179,6 +179,7 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 Grid.prototype.generateTile = function() {
 	this.newTile = new Tile(this.getRandomPosition(), Math.floor(Math.random()*2));
 	this.insertTile(this.newTile);
+	console.log(this.adjacentTiles(this.newTile));
 };
 
 /*
@@ -190,7 +191,6 @@ Grid.prototype.update = function(dir) {
 	this.moveMap = [];
 	this.eachCell(dir, function(x,y,tile) {
 		if(tile) {
-			console.log(self.adjacentTiles(tile));
 			update = self.getMovePosition({x:x, y:y}, dir);
 			if(update.merge) {
 				self.score += Math.pow(2, tile.level+1);
@@ -206,7 +206,10 @@ Grid.prototype.update = function(dir) {
 	if(this.differentState())
 		this.generateTile();
 	else this.newTile = null;
-	console.log(this.gameOver());
+	if(this.gameOver()) {
+		globalGame.inputManager.unbind();
+		globalGame.gameOverHandler();
+	};
 };
 
 /*
@@ -240,7 +243,7 @@ Grid.prototype.gameOver = function() {
 			if(tile) {
 				adjacent = self.adjacentTiles(tile);
 				for (var i = 0; i < adjacent.length; i++) {
-					if(adjacent[i].level == tile.level)
+					if(adjacent[i].level === tile.level)
 						return false;
 				};
 			};

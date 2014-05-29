@@ -122,8 +122,9 @@ GraphicsManager.prototype.updateScene = function() {
 		this.dys = [];
 		this.dn = 0;
 		this.tile3Ds = [];
-		this.inputmanager.bind();
 		this.drawTiles();
+		if(!this.grid.gameOver())
+			this.inputmanager.bind();
 		window.cancelAnimationFrame(id);
 	};
 	this.refreshCounter++;
