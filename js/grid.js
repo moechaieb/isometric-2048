@@ -205,7 +205,6 @@ Grid.prototype.update = function(dir) {
 	if(this.differentState())
 		this.generateTile();
 	else this.newTile = null;
-	console.log(this.gameOver());
 	if(this.gameOver()) {
 		globalGame.gameOverHandler();
 	};
@@ -239,7 +238,6 @@ Grid.prototype.gameOver = function() {
 		this.eachCell(null, function(x,y,tile) {
 			if(tile) {
 				adjacent = self.adjacentTiles(tile);
-				console.log(adjacent);
 				for (var i = 0; i < adjacent.length; i++) {
 					if(adjacent[i].level === tile.level) {
 						g = false;

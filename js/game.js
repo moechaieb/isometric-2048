@@ -13,6 +13,7 @@ function Game() {
 	this.grid.init();
 	this.graphicsManager.drawBoard();
 	this.graphicsManager.drawTiles(this.grid);
+	globalGame = this;
 };
 
 /*
