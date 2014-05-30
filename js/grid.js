@@ -13,6 +13,7 @@ function Grid() {
 	this.tiles = [[null,null,null,null],[null,null,null,null],[null,null,null,null],[null,null,null,null]];
 	this.newTile = null;
 	this.score = 0;
+	this.done = false;
 };
 
 /*
@@ -196,6 +197,8 @@ Grid.prototype.update = function(dir) {
 				self.removeTile(tile);
 				self.insertTile(new Tile(update.newPos, tile.level+1));
 				self.addToMoveMap({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level+1});
+				if(tile.level+1 === 10)
+					this.done = true;
 			} else {
 				self.updateTile(tile, update.newPos)
 				self.addToMoveMap({oldPos: {x:x, y:y}, newPos: update.newPos, level: tile.level});
@@ -205,7 +208,7 @@ Grid.prototype.update = function(dir) {
 	if(this.differentState())
 		this.generateTile();
 	else this.newTile = null;
-	if(this.gameOver()) {
+	if(this.gameOver() || this.done) {
 		globalGame.gameOverHandler();
 	};
 };

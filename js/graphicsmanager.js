@@ -123,7 +123,7 @@ GraphicsManager.prototype.updateScene = function() {
 		this.dn = 0;
 		this.tile3Ds = [];
 		this.drawTiles();
-		if(!this.grid.gameOver())
+		if(!(this.grid.done) && !this.grid.gameOver())
 			this.inputmanager.bind();
 		window.cancelAnimationFrame(id);
 	};

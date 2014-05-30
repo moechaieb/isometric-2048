@@ -145,23 +145,15 @@ footer a {
 .gameOver p {
 	opacity: 1;
 	font-size: 2em;
-	width: 96%;
 	text-align: center;
-	margin: 2%;
+	margin: 5%;
 }
 
-.gameOver a {
-	position: relative;
+.gameOver .b {
 	font-weight: bold;
-	height: 100px;
-	line-height: 100px;
-	font-size: 2em;
-	text-align: center;
 	cursor: pointer;
-	left: 50%;
-	margin-left: -72px;
 }
 
-.gameOver a:HOVER {
+.gameOver .b:HOVER {
 	color: blue;
 }
