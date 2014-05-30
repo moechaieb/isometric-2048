@@ -68,7 +68,7 @@ GraphicsManager.prototype.drawBoard = function() {
 	Contructs a 3D tile representation of a tile object.
 */
 GraphicsManager.prototype.makeTile3D = function(tile) {
-	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, Math.pow(1.75, tile.level)*thickness);
+	return Shape.Prism(Point(tile.x*(squareSide+space)+space,tile.y*(squareSide+space)+space), squareSide, squareSide, (1+tile.level)*thickness);
 };
 
 /*
