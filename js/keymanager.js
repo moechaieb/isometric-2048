@@ -7,11 +7,9 @@
 /*
 	Constructs a new InputManager object.
 */
-function InputManager(gpx, grid) {
-	this.graphicsManager = gpx;
-	this.gameGrid = grid;
+function InputManager() {
 	this.bind();
-}
+};
 
 /*
 	Binds the input handlers.
@@ -40,11 +38,11 @@ InputManager.prototype.unbind = function() {
 	This function is triggered when a key is pressed.
 */
 InputManager.prototype.update = function(n) {
-	this.gameGrid.update(n);
-	if(this.gameGrid.differentState()) {
+	globalGame.grid.update(n);
+	if(globalGame.grid.differentState()) {
 		this.unbind();
-		this.graphicsManager.preUpdate();
-		this.graphicsManager.updateScene();
+		globalGame.graphicsManager.preUpdate();
+		globalGame.graphicsManager.updateScene();
 	};
 	this.updateScore();
 
@@ -56,13 +54,13 @@ InputManager.prototype.update = function(n) {
 InputManager.prototype.rotate = function() {
 	this.unbind();
 	//determine the angle based on direction first
-	this.graphicsManager.preRotate();
-	this.graphicsManager.rotateScene();
+	globalGame.graphicsManager.preRotate();
+	globalGame.graphicsManager.rotateScene();
 };
 
 /*
 	Updates the score on the screen
 */
 InputManager.prototype.updateScore = function() {
-	$(".score").html("Score: "+this.gameGrid.score);
+	$(".score").html("Score: "+globalGame.grid.score);
 };

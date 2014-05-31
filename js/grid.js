@@ -8,7 +8,6 @@
 	Constructs an empty 4 by 4 grid.
 */
 function Grid() {
-	this.gridSize = 4;
 	this.moveMap = [];
 	this.tiles = [[null,null,null,null],[null,null,null,null],[null,null,null,null],[null,null,null,null]];
 	this.newTile = null;
@@ -23,14 +22,14 @@ function Grid() {
 */
 Grid.prototype.eachCell = function(dir, fun) {
 	if(!dir || dir < 2) {
-		for (var i = this.gridSize-1; i >= 0; i--) {
-			for (var j = this.gridSize-1; j >= 0; j--) {
+		for (var i = globalGame.gridSize-1; i >= 0; i--) {
+			for (var j = globalGame.gridSize-1; j >= 0; j--) {
 				fun(i, j, this.tiles[i][j]);
 			};
 		};
 	} else {
-		for (var i = 0; i < gridSize; i++) {
-			for (var j = 0; j < gridSize; j++) {
+		for (var i = 0; i < globalGame.gridSize; i++) {
+			for (var j = 0; j < globalGame.gridSize; j++) {
 				fun(i, j, this.tiles[i][j]);
 			};
 		};
@@ -103,7 +102,7 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 		case 0: //up
 			// Find the upmost valid position, then depending on the tile that's right after,
 			// determine if you need to merge or not
-			while(pos.y+inc < gridSize) {
+			while(pos.y+inc < globalGame.gridSize) {
 				if(this.tiles[pos.x][pos.y+inc] == null)
 					inc++;
 				else break;
@@ -120,7 +119,7 @@ Grid.prototype.getMovePosition = function(pos, dir) {
 			};
 			break;
 		case 1: //right
-			while(pos.x+inc < gridSize) {
+			while(pos.x+inc < globalGame.gridSize) {
 				if(this.tiles[pos.x+inc][pos.y] == null)
 					inc++;
 				else break;
@@ -279,7 +278,7 @@ Grid.prototype.adjacentTiles = function(tile) {
 	TODO: might need some refactoring to sort sub-sequences by tile height.
 */
 Grid.prototype.addToMoveMap = function(move) {
-	var index = move.newPos.x+move.newPos.y*gridSize;
+	var index = move.newPos.x+move.newPos.y*globalGame.gridSize;
 	while(this.moveMap[index])
 		index--;
 	if(index < 0)

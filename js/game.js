@@ -5,15 +5,15 @@
 *****************************************************/
 
 function Game() {
-	var gridSize = 4;
+	globalGame = this;
+	this.gridSize = 4;
 	this.grid = new Grid();
-	this.graphicsManager = new GraphicsManager(this.grid);
-	this.inputManager = new InputManager(this.graphicsManager, this.grid);
-	this.graphicsManager.inputmanager = this.inputManager;
+	this.graphicsManager = new GraphicsManager();
+	this.inputManager = new InputManager();
 	this.grid.init();
 	this.graphicsManager.drawBoard();
 	this.graphicsManager.drawTiles(this.grid);
-	globalGame = this;
+	console.log(globalGame);
 };
 
 /*

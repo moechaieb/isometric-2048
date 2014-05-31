@@ -21,9 +21,8 @@ var Color = Isomer.Color;
 	For animations to work, the following must hold: refreshRate*(squareSide+space) must be an integer
 */
 var squareSide = 1.3;
-var gridSize = 4;
 var thickness = 0.1;
-var refreshRate = 3;
+var refreshRate = 2.5;
 var elevation = 3;
 var space = 0.7;
 var center = Point(2*squareSide+2.5*space, 2*squareSide+2.5*space, 0); //to be used later when implementing rotating the board
@@ -35,9 +34,8 @@ var progression = [new Color(230,230,230), new Color(220,180,160), new Color(210
 /*
 	Constucts a GraphicsManager object, wrapping an Isomer object
 */
-function GraphicsManager(grid) {
+function GraphicsManager() {
 	this.iso = new Isomer(document.getElementById("game"));
-	this.grid = grid;
 	this.dxs = [];
 	this.dys = [];
 	this.dn = 0;
@@ -52,10 +50,10 @@ function GraphicsManager(grid) {
 */
 GraphicsManager.prototype.drawBoard = function() {
 	//add board
-	this.add(Shape.Prism(Point(-thickness,-thickness,0), gridSize*squareSide+(gridSize+1)*space, gridSize*squareSide+(gridSize+1)*space, thickness), null, boardcolors[1]);
+	this.add(Shape.Prism(Point(-thickness,-thickness,0), globalGame.gridSize*squareSide+(globalGame.gridSize+1)*space, globalGame.gridSize*squareSide+(globalGame.gridSize+1)*space, thickness), null, boardcolors[1]);
 	//initialize the squares
-	for (var i = gridSize-1; i >= 0; i--) {
-		for (var j = gridSize-1; j >= 0; j--) {
+	for (var i = globalGame.gridSize-1; i >= 0; i--) {
+		for (var j = globalGame.gridSize-1; j >= 0; j--) {
 			this.add(new Path([Point(i*(squareSide+space)+space, j*(squareSide+space)+space, 0), 
 				Point(i*(squareSide+space)+space+squareSide, j*(space+squareSide)+space, 0),
 				Point(i*(squareSide+space)+space+squareSide, j*(space+squareSide)+space+squareSide, 0),
@@ -78,7 +76,7 @@ GraphicsManager.prototype.drawTiles = function() {
 	var self = this;
 	this.iso.canvas.clear();
 	this.drawBoard();
-	this.grid.eachCell(null, function(x,y,tile) {
+	globalGame.grid.eachCell(null, function(x,y,tile) {
 		if(tile)
 			self.add(self.makeTile3D(tile), null, progression[tile.level]);
 	});
@@ -88,9 +86,9 @@ GraphicsManager.prototype.drawTiles = function() {
 	Prepares structures for updateScene method. Must be called before updateScene()!
 */
 GraphicsManager.prototype.preUpdate = function() {
-	for (var i = this.grid.moveMap.length-1; i >= 0; i--) {
-		if(this.grid.moveMap[i]) {
-			this.tile3Ds[i] = this.makeTile3D({x: this.grid.moveMap[i].oldPos.x, y: this.grid.moveMap[i].oldPos.y, level: this.grid.moveMap[i].level});
+	for (var i = globalGame.grid.moveMap.length-1; i >= 0; i--) {
+		if(globalGame.grid.moveMap[i]) {
+			this.tile3Ds[i] = this.makeTile3D({x: globalGame.grid.moveMap[i].oldPos.x, y: globalGame.grid.moveMap[i].oldPos.y, level: globalGame.grid.moveMap[i].level});
 			this.dxs[i] = 0;
 			this.dys[i] = 0;
 		};	
@@ -105,15 +103,15 @@ GraphicsManager.prototype.updateScene = function() {
 	var id = window.requestAnimationFrame(this.updateScene.bind(this));
 	this.iso.canvas.clear();
 	this.drawBoard();
-	if(this.grid.newTile) {
-		this.add(this.makeTile3D(this.grid.newTile), {x:0, y:0,z: elevation*(1-this.dn)}, progression[this.grid.newTile.level]);
+	if(globalGame.grid.newTile) {
+		this.add(this.makeTile3D(globalGame.grid.newTile), {x:0, y:0,z: elevation*(1-this.dn)}, progression[globalGame.grid.newTile.level]);
 		this.dn += 1/(refreshRate*(squareSide+space));
 	};
-	for (var i = this.grid.moveMap.length-1; i >= 0; i--) {
-		if(this.grid.moveMap[i]) {
-			this.add(this.tile3Ds[i],{x:this.dxs[i], y:this.dys[i], z:0}, progression[this.grid.moveMap[i].level]);
-			this.dxs[i] += (this.grid.moveMap[i].newPos.x-(this.grid.moveMap[i].oldPos.x))/refreshRate;
-			this.dys[i] += (this.grid.moveMap[i].newPos.y-(this.grid.moveMap[i].oldPos.y))/refreshRate;
+	for (var i = globalGame.grid.moveMap.length-1; i >= 0; i--) {
+		if(globalGame.grid.moveMap[i]) {
+			this.add(this.tile3Ds[i],{x:this.dxs[i], y:this.dys[i], z:0}, progression[globalGame.grid.moveMap[i].level]);
+			this.dxs[i] += (globalGame.grid.moveMap[i].newPos.x-(globalGame.grid.moveMap[i].oldPos.x))/refreshRate;
+			this.dys[i] += (globalGame.grid.moveMap[i].newPos.y-(globalGame.grid.moveMap[i].oldPos.y))/refreshRate;
 		};
 	};
 	if(this.refreshCounter === refreshRate*(squareSide+space)+1) {
@@ -123,8 +121,8 @@ GraphicsManager.prototype.updateScene = function() {
 		this.dn = 0;
 		this.tile3Ds = [];
 		this.drawTiles();
-		if(!(this.grid.done) && !this.grid.gameOver())
-			this.inputmanager.bind();
+		if(!(globalGame.grid.done) && !globalGame.grid.gameOver())
+			globalGame.inputManager.bind();
 		window.cancelAnimationFrame(id);
 	};
 	this.refreshCounter++;
