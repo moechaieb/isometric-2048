@@ -145,7 +145,7 @@ GraphicsManager.prototype.rotateScene = function() {
 	this.drawBoard();
 	this.drawTiles();
 	if(this.refreshCounter === refreshRate*24) {
-		this.inputmanager.bind();
+		globalGame.inputManager.bind();
 		this.refreshCounter = 0;
 		this.dn = 0;
 		window.cancelAnimationFrame(id);

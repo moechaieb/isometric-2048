@@ -22,7 +22,7 @@ InputManager.prototype.bind = function() {
 	Mousetrap.bind(['left', "a"], function() {self.update(3);});
 	Mousetrap.bind(['enter', "space"], function() {self.rotate()});
 	$(".rotate").click(function() {self.rotate()});
-	$(".newGame").click(function() {new Game(); $(".score").html("Score: 0");});
+	$(".newGame").click(function() {globalGame.reset(); $(".score").html("Score: 0");});
 };
 
 /*
