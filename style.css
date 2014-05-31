@@ -52,6 +52,7 @@ h2 {
 	padding-top: 20px;
 	border-top: 1px solid #888;
 }
+
 footer {
 	color: #222;
 	background-color: #a1cee0;
@@ -76,7 +77,7 @@ footer a {
 	position: absolute;
 	font-size: 1.5em;
 	font-weight: bold;
-	top: 715px;
+	top: 530px;
 	left: 50%;
 	margin-left: -200px;
 	cursor: pointer;
@@ -92,7 +93,7 @@ footer a {
 	position: absolute;
 	font-size: 1.5em;
 	font-weight: bold;
-	top: 715px;
+	top: 530px;
 	left: 50%;
 	width: 200px;
 	height: 30px;
@@ -104,14 +105,14 @@ footer a {
 	margin: 0 auto 0 auto;
 	display: block;
 	width: 600px;
-	height: 700px;
+	height: 500px;
 }
 
 .rotate {
 	cursor: pointer;
 	width: 20px;
 	position: absolute;
-	top: 715px;
+	top: 530px;
 	left: 50%;
 	margin-left: -260px;
 	height: 30px;
