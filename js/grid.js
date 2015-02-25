@@ -122,11 +122,9 @@ Grid.prototype.moveUp = function(pos, dir) {
   var merge = false;
   var newPos = {x:pos.x, y:pos.y};
   var inc = 1;
-  while(pos.y+inc < globalGame.gridSize) {
-    if(this.tiles[pos.x][pos.y+inc] == null)
-      inc++;
-    else break;
-  };
+  while(pos.y+inc < globalGame.gridSize && this.tiles[pos.x][pos.y+inc] == null) {
+    inc++;
+  }
   if(this.tiles[pos.x][pos.y+inc] == null) {
     newPos = {x:pos.x, y:pos.y+inc-1}
     return {newPos: newPos, merge: merge};
@@ -190,24 +188,55 @@ Grid.prototype.moveLeft = function(pos, dir) {
 Grid.prototype.moveRight = function(pos, dir) {
   var merge = false;
   var newPos = {x:pos.x, y:pos.y};
-  var inc = 1;
-  while(pos.x+inc < globalGame.gridSize) {
-    if(this.tiles[pos.x+inc][pos.y] == null)
-      inc++;
-    else break;
+  while(this.isNextTileEmpty(newPos, dir)) {
+    newPos = this.getNewPosition(newPos,dir);
   }
-  if(this.tiles[pos.x+inc] == null) {
-    newPos = {x:pos.x+inc-1, y:pos.y}
-    return {newPos: newPos, merge: merge};
-  } else if(this.tiles[pos.x+inc][pos.y]) {
-    if(this.tiles[pos.x+inc][pos.y].level == this.tiles[pos.x][pos.y].level) {
-      newPos = {x: pos.x+inc, y: pos.y};
-      merge = true;
-    } 
-    else 
-      newPos = {x: pos.x+inc-1, y: pos.y};
-  }
+  var nextTile = this.getNextTile(newPos, dir);
+  if(nextTile && nextTile.level == this.getTile(pos).level) {
+    newPos = this.getNewPosition(newPos, dir);
+    merge = true;
+  } 
   return {newPos: newPos, merge: merge};
+}
+
+Grid.prototype.isOutOfBounds = function(pos) {
+  return (pos.x >= globalGame.gridSize || pos.y >= globalGame.gridSize);
+}
+
+Grid.prototype.isNextTileEmpty = function(pos, dir) {
+  var newPos = this.getNewPosition(pos, dir);
+  if(this.isOutOfBounds(newPos))
+    return false;
+  return (this.getTile(newPos) == null);
+}
+
+Grid.prototype.getNextTile = function(pos, dir) {
+  return this.getTile(this.getNewPosition(pos, dir));
+}
+
+Grid.prototype.getNewPosition = function(pos, dir) {
+  var newPos = {x:pos.x, y:pos.y};
+  switch(dir) {
+    case 0: //up
+      newPos.y++;
+      break;
+    case 1: //right
+      newPos.x++;
+      break;
+    case 2: //down
+      newPos.y--;
+      break;
+    case 3: //left
+      newPos.x--;
+      break;
+  }
+  return newPos;
+}
+
+Grid.prototype.getTile = function(pos) {
+  if(this.isOutOfBounds(pos))
+    return false;
+  return this.tiles[pos.x][pos.y];
 }
 
 /*
